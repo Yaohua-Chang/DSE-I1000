@@ -23,16 +23,29 @@ class Table:
         for attr in attributes:
             self.attributes_names.append(attr.name)
 
+    ###############
+    # PRINT #
+    ###############
     def print_attributes(self):
         print("The table named: ", self.name, " has attributes:")
         for attr in self.attributes:
             print(attr.name , "  " + attr.type, end='\n')
-
+                 
     def print_fds(self):
         print("The table named: ", self.name, "\nHas FD's: ", self.fds)
 
+    def print_boolean_conditions(self):
+        print("The table named: ", self.name, " has boolean conditions:")
+        for attr in self.attributes:
+            if attr.more_than_value != None and attr.less_than_value != None:
+                print(str(attr.more_than_value) + " < " + attr.name , " < " + str(attr.less_than_value), end='\n')
+            elif attr.more_than_value != None:
+                print(attr.name , " > " + str(attr.more_than_value), end='\n')
+            elif attr.less_than_value != None:
+                print(attr.name , " < " + str(attr.less_than_value), end='\n')
+
     ########
-    # FD'S #
+    # Constraint'S #
     ########
 
     def add_fd(self, fd_split):
@@ -61,7 +74,53 @@ class Table:
     def add_mvd(self, mvd_split):
         return ""
 
+    def add_boolean_conditions(self, input_str):
+        if "<" in input_str:
+            input_split = input_str.replace(" ","").split('<')
+            if len(input_split)!=2:
+                return "This is invaild input."
+            else:
+                if not input_split[0] in self.attributes_names:
+                    return "There is no the attribute in the table"
+                else:
+                    for attr in self.attributes:
+                        if attr.name == input_split[0]:
+                            less_than_value = int(input_split[1])
+                            if attr.more_than_value == None:
+                                attr.set_less_than_value(less_than_value)
+                                return "Add boolean conditions successfully"
+                            elif less_than_value > attr.more_than_value:
+                                attr.set_less_than_value(less_than_value)
+                                return "Add boolean conditions successfully"
+                            else:
+                                return "This is conflicting Boolean conditions"
+        elif ">" in input_str:
+            input_split = input_str.replace(" ","").split('>')
+            if len(input_split)!=2:
+                return "This is invaild input."
+            else:
+                if not input_split[0] in self.attributes_names:
+                    return "There is no the attribute in the table"
+                else:
+                    for attr in self.attributes:
+                        if attr.name == input_split[0]:
+                            more_than_value = int(input_split[1])
+                            if attr.less_than_value == None:
+                                attr.set_more_than_value(more_than_value)
+                                return "Add boolean conditions successfully" 
+                            elif more_than_value < attr.less_than_value:
+                                attr.set_more_than_value(more_than_value)
+                                return "Add boolean conditions successfully"
+                            else:
+                                return "This is conflicting Boolean conditions"
+
+                            
     
+
+
+    ########
+    # FD'S #
+    ########
     def fd_split(self, fds):
         """Update"""
         for fd in self.fds:

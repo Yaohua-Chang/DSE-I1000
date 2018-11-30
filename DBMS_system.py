@@ -27,7 +27,7 @@ def create_table():
             Attribute("D", "string"),
             Attribute("E", "string")]
 
-    new_table = Table("table1", fake_attrs)
+    new_table = Table("Student", fake_attrs)
 
     while True:
         input_str = input("please input one constraint for the new tabel(or input quit to stop):")
@@ -43,7 +43,8 @@ def create_table():
             feedback = new_table.add_fd(input_split) 
             print(feedback)
         elif ">" in input_str or "<" in input_str:
-            pass 
+             feedback = new_table.add_boolean_conditions(input_str)
+             print(feedback)
         else:
             print("Invalid constraint, please input again.")
         
@@ -53,4 +54,4 @@ def create_table():
 
 if __name__ == "__main__":
     new_table = create_table()
-    new_table.print_fds()
+    new_table.print_boolean_conditions()
