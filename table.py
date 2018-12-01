@@ -27,6 +27,7 @@ class Table:
     #########
     # PRINT #
     #########
+
     def print_attributes(self):
         print("The table named: ", self.name, " has attributes:")
         for attr in self.attributes:
