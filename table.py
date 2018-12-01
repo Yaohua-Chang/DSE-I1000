@@ -9,16 +9,15 @@ class Table:
         """Update"""
         self.name = name
         self.attributes = attributes
+        self.master_key = ""
         self.keys = set()
+        self.superkeys = set()
         self.fds = []
         self.mvds = []
         self.delimiter = delimiter
         self.left_list = []
         self.right_list = []
-        self.superkeys = set()
         self.nf = ""
-        self.LEFT_SIDE = 0
-        self.RIGHT_SIDE = 1
         self.attributes_names = []
 
         for attr in attributes:
@@ -52,8 +51,8 @@ class Table:
 
     def add_fd(self, fd_split):
 
-        left_set = set(fd_split[self.LEFT_SIDE])
-        right_set = set(fd_split[self.RIGHT_SIDE])
+        left_set = set(fd_split[0])
+        right_set = set(fd_split[1])
 
         # check the invalid input
         if len(fd_split) != 2:
@@ -67,17 +66,17 @@ class Table:
         if right_set.issubset(left_set):
             return "This is trivial FD"
 
-        fd = fd_split[self.LEFT_SIDE] + "->" + fd_split[self.RIGHT_SIDE]
+        fd = fd_split[0] + "->" + fd_split[1]
         self.fds.append(fd)
 
         # add mvd that is implied from this fd
-        implied_mvd = fd_split[self.LEFT_SIDE] + "->->" + fd_split[self.RIGHT_SIDE]
+        implied_mvd = fd_split[0] + "->->" + fd_split[1]
         self.mvds.append(implied_mvd)
 
         return "Added a new fd successfully: " + fd
 
     def remove_fd(self, fd_split):
-        fd_to_rm = fd_split[self.LEFT_SIDE] + "->" + fd_split[self.RIGHT_SIDE]
+        fd_to_rm = fd_split[0] + "->" + fd_split[1]
         tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
         self.fds = tmp_fds
         return "The fd: " + fd " was successfully removed."
@@ -85,8 +84,8 @@ class Table:
     def add_mvd(self, mvd_split):
         """Update"""
 
-        left_set = set(fd_split[self.LEFT_SIDE])
-        right_set = set(fd_split[self.RIGHT_SIDE])
+        left_set = set(fd_split[0])
+        right_set = set(fd_split[1])
 
         # check defining mvd for table of 2 attr
         if len(self.attributes <= 2):
@@ -101,7 +100,7 @@ class Table:
         if right_set.issubset(left_set):
             return "This is a trivial mvd"
 
-        mvd = mvd_split[self.LEFT_SIDE] + "->->" + mvd_split[self.RIGHT_SIDE]
+        mvd = mvd_split[0] + "->->" + mvd_split[1]
         self.mvds.append(mvd)
 
         return "Added a new mvd successfully: " + mvd
@@ -153,8 +152,8 @@ class Table:
         """Update"""
         for fd in self.fds:
             fd_split = fd.split("->")
-            self.left_list.append(fd_split[self.LEFT_SIDE])
-            self.right_list.append(fd_split[self.RIGHT_SIDE])
+            self.left_list.append(fd_split[0])
+            self.right_list.append(fd_split[1])
 
     # Right now, can only add fd's once because not checking for duplicates when
     # pushing into self.fds at the end
@@ -172,8 +171,8 @@ class Table:
                 fds.remove(fd)
                 continue;
 
-            left_set = set(fd_split[self.LEFT_SIDE])
-            right_set = set(fd_split[self.RIGHT_SIDE])
+            left_set = set(fd_split[0])
+            right_set = set(fd_split[1])
             # remove the wrong FD
             if not left_set.issubset(self.attributes) or not right_set.issubset(self.attributes):
                 fds.remove(fd)
@@ -186,7 +185,7 @@ class Table:
             # Convert those FDs not in the standard non-trivial forms to standard non-trival forms
             if len(right_set) != 1:
                 for element in right_set:
-                    fds.append(fd_split[self.LEFT_SIDE] + "->" + element)
+                    fds.append(fd_split[0] + "->" + element)
                 fds.remove(fd)
         # Repeated FDs are identified and ignored
         self.fds = sorted(set(fds))
@@ -202,8 +201,8 @@ class Table:
 
         for fd in self.fds:
             fd_split = fd.split("->")
-            self.left_list.append(fd_split[self.LEFT_SIDE])
-            self.right_list.append(fd_split[self.RIGHT_SIDE])
+            self.left_list.append(fd_split[0])
+            self.right_list.append(fd_split[1])
 
         seed = attr
 

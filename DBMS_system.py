@@ -77,6 +77,15 @@ def update_normal_form(table):
         else:
             print("That's not a valid decision!")
 
+def define_key(table, key):
+    valid_key = key in table.keys
+    while not valid_key:
+        print("Unfortunately that's not a viable key. Here are you options:\n" + str(table.keys))
+        key = input("Try a different key: ")
+        valid_key = key in table.keys
+    print("Great selection! " + key + " is a viable key")
+    table.master_key = key
+
 if __name__ == "__main__":
     new_table = create_table()
     new_table.print_boolean_conditions()
