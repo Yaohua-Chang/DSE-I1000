@@ -11,26 +11,27 @@ class Table:
         self.attributes = attributes
         self.keys = set()
         self.fds = []
+        self.mvds = []
         self.delimiter = delimiter
         self.left_list = []
         self.right_list = []
         self.superkeys = set()
         self.nf = ""
         self.LEFT_SIDE = 0
-        self.RIGHT_SIDE = 1 
-        self.attributes_names =[]
+        self.RIGHT_SIDE = 1
+        self.attributes_names = []
 
         for attr in attributes:
             self.attributes_names.append(attr.name)
 
-    ###############
+    #########
     # PRINT #
-    ###############
+    #########
     def print_attributes(self):
         print("The table named: ", self.name, " has attributes:")
         for attr in self.attributes:
-            print(attr.name , "  " + attr.type, end='\n')
-                 
+            print(attr.name , "  " + attr.type, end = '\n')
+
     def print_fds(self):
         print("The table named: ", self.name, "\nHas FD's: ", self.fds)
 
@@ -44,40 +45,64 @@ class Table:
             elif attr.less_than_value != None:
                 print(attr.name , " < " + str(attr.less_than_value), end='\n')
 
-    ########
-    # Constraint'S #
-    ########
+    ###############
+    # CONSTRAINTS #
+    ###############
 
     def add_fd(self, fd_split):
 
         left_set = set(fd_split[self.LEFT_SIDE])
         right_set = set(fd_split[self.RIGHT_SIDE])
 
-        # check the invaild input
+        # check the invalid input
         if len(fd_split) != 2:
-            return "This is invaild input."
-        
+            return "This is invalid input."
+
         # check the wrong FD
         if not left_set.issubset(self.attributes_names) or not right_set.issubset(self.attributes_names):
             return "This is wrong FD. There is no all attributes of FD in the table"
-        
+
         # remove the trivial FD
         if right_set.issubset(left_set):
             return "This is trivial FD"
-        
+
         fd = fd_split[self.LEFT_SIDE] + "->" + fd_split[self.RIGHT_SIDE]
         self.fds.append(fd)
 
-        return "Add a new fd successfully"
+        # add mvd that is implied from this fd
+        implied_mvd = fd_split[self.LEFT_SIDE] + "->->" + fd_split[self.RIGHT_SIDE]
+        self.mvds.append(implied_mvd)
 
+        return "Added a new fd successfully: " + fd
 
     def add_mvd(self, mvd_split):
-        return ""
+        """Update"""
+
+        left_set = set(fd_split[self.LEFT_SIDE])
+        right_set = set(fd_split[self.RIGHT_SIDE])
+
+        # check defining mvd for table of 2 attr
+        if len(self.attributes <= 2):
+            return "MVD trivial for a table with <= 2 attributes"
+        # check invalid input
+        if len(mvd_split) != 2:
+            return "This is invalid input."
+        # check attr not in table
+        if not left_set.issubset(self.attributes_names) or not right_set.issubset(self.attributes_names):
+            return "This is wrong FD. There is no all attributes of FD in the table"
+        # remove trivial mvd
+        if right_set.issubset(left_set):
+            return "This is a trivial mvd"
+
+        mvd = mvd_split[self.LEFT_SIDE] + "->->" + mvd_split[self.RIGHT_SIDE]
+        self.mvds.append(mvd)
+
+        return "Added a new mvd successfully: " + mvd
 
     def add_boolean_conditions(self, input_str):
         if "<" in input_str:
             input_split = input_str.replace(" ","").split('<')
-            if len(input_split)!=2:
+            if len(input_split) != 2:
                 return "This is invaild input."
             else:
                 if not input_split[0] in self.attributes_names:
@@ -107,16 +132,12 @@ class Table:
                             more_than_value = int(input_split[1])
                             if attr.less_than_value == None:
                                 attr.set_more_than_value(more_than_value)
-                                return "Add boolean conditions successfully" 
+                                return "Add boolean conditions successfully"
                             elif more_than_value < attr.less_than_value:
                                 attr.set_more_than_value(more_than_value)
                                 return "Add boolean conditions successfully"
                             else:
                                 return "This is conflicting Boolean conditions"
-
-                            
-    
-
 
     ########
     # FD'S #
@@ -128,7 +149,7 @@ class Table:
             self.left_list.append(fd_split[self.LEFT_SIDE])
             self.right_list.append(fd_split[self.RIGHT_SIDE])
 
-    # Right now, can only add fd's once b/c not checking for duplicates when
+    # Right now, can only add fd's once because not checking for duplicates when
     # pushing into self.fds at the end
     def add_fds(self, fd_str):
         """Update"""
@@ -283,5 +304,3 @@ class Table:
             self.nf= "BCNF"
         print("This table has normal form: " + self.nf)
         return self.nf
-
-
