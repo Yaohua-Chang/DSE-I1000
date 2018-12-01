@@ -1,1 +1,1 @@
-# DSE-I1000-Database-I
+# Group Project in Database System I
