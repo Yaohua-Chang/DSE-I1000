@@ -75,6 +75,12 @@ class Table:
 
         return "Added a new fd successfully: " + fd
 
+    def remove_fd(self, fd_split):
+        fd_to_rm = fd_split[self.LEFT_SIDE] + "->" + fd_split[self.RIGHT_SIDE]
+        tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
+        self.fds = tmp_fds
+        return "The fd: " + fd " was successfully removed."
+
     def add_mvd(self, mvd_split):
         """Update"""
 
