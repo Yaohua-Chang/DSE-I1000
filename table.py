@@ -19,6 +19,7 @@ class Table:
         self.right_list = []
         self.nf = ""
         self.attributes_names = []
+        self.tuples = {}
 
         for attr in attributes:
             self.attributes_names.append(attr.name)
@@ -265,6 +266,15 @@ class Table:
     def print_keys(self):
         print("All keys for this table are : ", str(self.keys))
 
+    def user_define_key(self, k):
+        valid_key = k in self.keys
+        while not valid_key:
+            print("Unfortunately that's not a viable key. Here are you options:\n" + str(table.keys))
+            k = input("Try a different key: ")
+            valid_key = k in self.keys
+        print("Great selection! " + k + " is a viable key")
+        table.master_key = k
+
     ################
     # NORMAL FORMS #
     ################
@@ -310,3 +320,19 @@ class Table:
             self.nf= "BCNF"
         print("This table has normal form: " + self.nf)
         return self.nf
+
+    ##########
+    # TUPLES #
+    ##########
+
+    def add_tuple(t):
+        # need a master key before beginning to add tuples
+        if self.master_key = "":
+            self.user_define_key()
+
+        # pick out the master key from the input tuple
+
+        # add tuple
+        # self.tuples[] =
+
+        return True
