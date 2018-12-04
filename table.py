@@ -15,8 +15,6 @@ class Table:
         self.mvds = []
         self.delimiter = delimiter
         # these two lists can be replaced with a set to check for already seen fd's
-        self.left_list = []
-        self.right_list = []
         self.nf = ""
         self.tuples = {}
         self.parent_database = db  # need reference to Database object for foreign keys
@@ -47,6 +45,7 @@ class Table:
     # CONSTRAINTS #
     ###############
 
+    # do we handle case of decomposition, i.e. AB->CD becomes AB->C & AB->D
     def add_fd(self, fd):
 
         try:
@@ -142,7 +141,7 @@ class Table:
     # FD'S #
     ########
 
-    # this function can be removed
+    # this function can be removed (no need to use in any above functions; I removed it from up there)
     def fd_split(self, fds):
         for fd in self.fds:
             fd_split = fd.split("->")
@@ -150,6 +149,9 @@ class Table:
             self.right_list.append(fd_split[1])
 
     # this is redundant, should be handled by DBMS_system
+    # my take: any interface type functions can be handled by DBMS system which calls Table class methods
+    # like add_fd one at a time (or until user quits)
+    # same is true of get_closure below which I think we can delete
     def add_fds(self, fd_str):
 
         fds = fd_str.replace(" ", "").split(",")
@@ -190,23 +192,23 @@ class Table:
 
     def closure(self, attr):
 
-        for fd in self.fds:
-            fd_split = fd.split("->")
-            self.left_list.append(fd_split[0])
-            self.right_list.append(fd_split[1])
+        lhs_list = [fd.split(self.delimiter)[0] for fd in self.fds]
+        rhs_list = [fd.split(self.delimiter)[1] for fd in self.fds]
 
         seed = attr
 
         outputs = set(seed)
-        count_fds = len(self.left_list)
+        count_fds = len(lhs_list)
 
         # to compute closure of the seed
         for _ in range(count_fds):
             for index in range(count_fds):
-                if set(self.left_list[index]).issubset(outputs):
-                    outputs.add(self.right_list[index])
+                if set(lhs_list[index]).issubset(outputs):
+                    outputs.add(rhs_list[index])
         return outputs
 
+    # this is redundant; can be handled by DBMS
+    # see add_fds for more
     def get_closure(self):
         while True:
             seed = input("Please type any set of attributes as the seed(or input quit to stop):")
@@ -221,18 +223,20 @@ class Table:
 
     def get_keys(self):
         keys = set()
-        print(self.left_list)
-        for seed in self.left_list:
+        lhs_list = [fd.split(self.delimiter)[0] for fd in self.fds]
+        rhs_list = [fd.split(self.delimiter)[1] for fd in self.fds]
+
+        for seed in lhs_list:
             outputs =  set(seed)
-            count_fds = len(self.left_list)
+            count_fds = len(lhs_list)
 
             # to compute closure of each seed
             for _ in range(count_fds):
                 for index in range(count_fds):
-                    if set(self.left_list[index]).issubset(outputs):
-                        outputs.add(self.right_list[index])
+                    if set(lhs_list[index]).issubset(outputs):
+                        outputs.add(rhs_list[index])
 
-            diff_attrs_outputs = set(self.attributes).difference(outputs)
+            diff_attrs_outputs = set(self.attributes_names).difference(outputs)
             for element in diff_attrs_outputs:
                 seed = seed + str(element)
             keys.add(seed)
