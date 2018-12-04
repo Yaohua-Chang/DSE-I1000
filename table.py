@@ -64,7 +64,7 @@ class Table:
 
         # add fd
         if fd not in self.seen_fd:
-            self.fds.append(lhs + self.delimiter + rhs)
+            self.fds.append(fd)
             self.seen_fd.add(fd)
         else:
             print("The fd: " + fd + " has already been added!")
@@ -351,9 +351,9 @@ class Table:
                     dict_check[lhs_value].add(rhs_value)
                     # if any set has more than one object it implies RHS -> LHS has been violated
                     # b/c RHS points to 2 distinct values of LHS
-                    if len(dict_check[lhs_value]) > 1:
-                        print("This breaks the consistency implied by the FD: " + fd)
-                        return False
+                if len(dict_check[lhs_value]) > 1:
+                    print("This breaks the consistency implied by the FD: " + fd)
+                    return False
 
         # check for foreign key
         # for table_name in self.parent_database.tables.keys():
@@ -362,3 +362,9 @@ class Table:
         self.tuples[k] = t
 
         return True
+
+    def get_tuple(k):
+        try:
+            return self.tuples[k]
+        except KeyError:
+            print("There is no tuple with key: " + k)
