@@ -22,39 +22,32 @@ def create_table():
 
     new_table = Table(tabel_name, attrs)
 
-    while True:
-        input_str = input("please input one Boolean condition for the new tabel(or input quit to stop):")
+    print("Please input at least one constraint. Input 'quit' at any time to stop.")
+    
+    while True:        
+        input_str = input("Please input Boolean condition:")
         if input_str == "quit":
-                break
-        if ">" in input_str or "<" in input_str:
-             feedback = new_table.add_boolean_conditions(input_str)
-             print(feedback)
-        else:
-            print("Invalid Boolean condition, please input again.")
-
-    while True:
-        input_str = input("please input one FD for the new tabel(or input quit to stop):")
-        if input_str == "quit":
-                break
-
-        if "->" in input_str:
-            input_split = input_str.replace(" ","").split("->")
-            feedback = new_table.add_fd(input_split)
-            print(feedback)
-        else:
-            print("Invalid FD, please input again.")
+            break
+        feedback = new_table.add_boolean_conditions(input_str)
+        print(feedback)
 
     while True:
-        input_str = input("please input one MVD for the new tabel(or input quit to stop):")
-        if input_str == "quit":
-                break
 
-        if "->->" in input_str:
-            input_split = input_str.replace(" ","").split("->")
-            feedback = new_table.add_mvd(input_split)
-            print(feedback)
-        else:
-            print("Invalid MVD, please input again.")
+        input_str = input("Please input FD:")
+        if input_str == "quit":
+            break
+        input_split = input_str.split("->")
+        feedback = new_table.add_fd(input_split)
+        print(feedback)
+            
+    while True:
+
+        input_str = input("Please input MVD:")
+        if input_str == "quit":
+            break
+        input_split = input_str.replace(" ","").split("->")
+        feedback = new_table.add_mvd(input_split)
+        print(feedback)
 
     return new_table
 
