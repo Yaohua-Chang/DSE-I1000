@@ -7,28 +7,26 @@ class Table:
     def __init__(self, db, name, attributes, delimiter = "->"):
         self.name = name
         self.attributes = sorted(attributes)
-        self.attributes_names = []
+        self.attributes_names = set([a.name for a in attributes])
         self.master_key = ""
         self.keys = set()
         self.superkeys = set()
         self.fds = []
         self.mvds = []
         self.delimiter = delimiter
+        # these two lists can be replaced with a set to check for already seen fd's
         self.left_list = []
         self.right_list = []
         self.nf = ""
         self.tuples = {}
         self.parent_database = db  # need reference to Database object for foreign keys
 
-        for attr in attributes:
-            self.attributes_names.append(attr.name)
-
     #########
     # PRINT #
     #########
 
     def print_attributes(self):
-        print("The table named: ", self.name, " has attributes:")
+        print("The table named: ", self.name, "\nHas attributes:")
         for attr in self.attributes:
             print(attr.name , "  " + attr.type, end = '\n')
 
@@ -49,58 +47,54 @@ class Table:
     # CONSTRAINTS #
     ###############
 
-    def add_fd(self, fd_split):
+    def add_fd(self, fd):
 
-        left_set = set(fd_split[0])
-        right_set = set(fd_split[1])
+        try:
+            lhs, rhs = fd.split(self.delimiter)
+        except ValueError:  # if can't split & unpack into 2 separate values
+            print("Must have a LHS & RHS!")
+            return False
 
-        # check the invalid input
-        if len(fd_split) != 2:
-            return "This is invalid input."
-
-        # check the wrong FD
-        if not left_set.issubset(self.attributes_names) or not right_set.issubset(self.attributes_names):
+        # check for attributes not in table
+        if not set(lhs).issubset(self.attributes_names) or not set(rhs).issubset(self.attributes_names):
             return "This is wrong FD. There is no all attributes of FD in the table"
 
-        # remove the trivial FD
-        if right_set.issubset(left_set):
+        # remove trivial FDs
+        if set(rhs).issubset(set(lhs)):
             return "This is trivial FD"
 
-        fd = fd_split[0] + "->" + fd_split[1]
-        self.fds.append(fd)
+        # add fd
+        self.fds.append(lhs + self.delimiter + rhs)
 
         # add mvd that is implied from this fd
-        implied_mvd = fd_split[0] + "->->" + fd_split[1]
-        self.mvds.append(implied_mvd)
+        self.mvds.append(lhs + "->->" + rhs)
 
         return "Added a new fd successfully: " + fd
 
-    def remove_fd(self, fd_split):
-        fd_to_rm = fd_split[0] + "->" + fd_split[1]
+    def remove_fd(self, fd_to_rm):
         tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
         self.fds = tmp_fds
-        return "The fd: " + fd_to_rm " was successfully removed."
+        return "The fd: " + fd_to_rm + " was successfully removed."
 
     def add_mvd(self, mvd_split):
 
-        left_set = set(fd_split[0])
-        right_set = set(fd_split[1])
+        try:
+            lhs, rhs = fd.split("->->")
+        except ValueError:  # if can't split & unpack into 2 separate values
+            print("Must have a LHS & RHS!")
+            return False
 
         # check defining mvd for table of 2 attr
         if len(self.attributes) <= 2:
             return "MVD trivial for a table with <= 2 attributes"
-        # check invalid input
-        if len(mvd_split) != 2:
-            return "This is invalid input."
         # check attr not in table
-        if not left_set.issubset(self.attributes_names) or not right_set.issubset(self.attributes_names):
-            return "This is wrong FD. There is no all attributes of FD in the table"
+        if not lhs.issubset(self.attributes_names) or not rhs.issubset(self.attributes_names):
+            return "This is wrong MVD. There is no all attributes of MVD in the table"
         # remove trivial mvd
-        if right_set.issubset(left_set):
+        if rhs.issubset(lhs):
             return "This is a trivial mvd"
 
-        mvd = mvd_split[0] + "->->" + mvd_split[1]
-        self.mvds.append(mvd)
+        self.mvds.append(lhs + "->->" + rhs)
 
         return "Added a new mvd successfully: " + mvd
 
@@ -147,14 +141,15 @@ class Table:
     ########
     # FD'S #
     ########
+
+    # this function can be removed
     def fd_split(self, fds):
         for fd in self.fds:
             fd_split = fd.split("->")
             self.left_list.append(fd_split[0])
             self.right_list.append(fd_split[1])
 
-    # Right now, can only add fd's once because not checking for duplicates when
-    # pushing into self.fds at the end
+    # this is redundant, should be handled by DBMS_system
     def add_fds(self, fd_str):
 
         fds = fd_str.replace(" ", "").split(",")
@@ -317,7 +312,7 @@ class Table:
     # TODO: foreign key designation
     def add_tuple(t):
         # need a master key before beginning to add tuples
-        if self.master_key = "":
+        if self.master_key == "":
             self.user_define_key()
 
         # pick out the master key from the input tuple
