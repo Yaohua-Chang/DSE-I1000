@@ -14,7 +14,7 @@ class Table:
         self.fds = []
         self.mvds = []
         self.delimiter = delimiter
-        # these two lists can be replaced with a set to check for already seen fd's
+        self.seen_fd = set()
         self.nf = ""
         self.tuples = {}
         self.parent_database = db  # need reference to Database object for foreign keys
@@ -63,12 +63,18 @@ class Table:
             return "This is trivial FD"
 
         # add fd
-        self.fds.append(lhs + self.delimiter + rhs)
+        if fd not in self.seen_fd:
+            self.fds.append(lhs + self.delimiter + rhs)
+            self.seen_fd.add(fd)
+        else:
+            print("The fd: " + fd + " has already been added!")
+            return False
 
         # add mvd that is implied from this fd
         self.mvds.append(lhs + "->->" + rhs)
 
-        return "Added a new fd successfully: " + fd
+        print("Added a new fd successfully: " + fd)
+        return True
 
     def remove_fd(self, fd_to_rm):
         tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
