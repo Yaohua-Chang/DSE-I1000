@@ -1,0 +1,49 @@
+Part I.a Create a tabel
+Error Input
+Empty
+A
+
+Correct Input
+A,string
+B,integer
+C,integer
+D,string
+E,string
+
+Part I.b Input constraint
+
+Error Input for boolean condition
+D
+D>
+G
+C<6
+C>8
+
+Correct Input for boolean condition
+A>10
+A<12
+B<6
+
+Error Input for fd
+A
+G->H
+AB->B
+A->->B
+A->B A->B
+
+Correct Input for fd
+C->D
+
+Error Input for mvd
+A->->B
+B->D
+
+Correct Input for mvd
+B->->C
+
+
+
+
+
+
+
