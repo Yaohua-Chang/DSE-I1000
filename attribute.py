@@ -14,6 +14,9 @@ class Attribute:
     def __eq__(self, other):
         return self.name == other.name
 
+    def __hash__(self):
+        return hash(self.name)
+
     def set_less_than_value(self, value):
          self.less_than_value = value
 
