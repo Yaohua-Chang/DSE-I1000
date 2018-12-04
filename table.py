@@ -314,7 +314,6 @@ class Table:
     ##########
 
     # TODO: foreign key designation
-    # TODO: check for FD consistency
     def add_tuple(t):
         # need a master key before beginning to add tuples
         if self.master_key = "":
@@ -325,6 +324,29 @@ class Table:
         for i, c in enumerate(self.attributes_names):
             if c in self.master_key:
                 k += t[i]
+
+        # check FD consistency
+        for fd in self.fds:
+            lhs, rhs = fd.split("->")
+            idx_lhs = self.attributes_names.index(lhs)
+            idx_rhs = self.attributes_names.index(rhs)
+
+            # iterate over other tuples in table and check for consistency
+            dict_check = {}
+            for tuple in self.tuples:
+                # pull out rhs & lhs from each tuple
+                lhs_value = tuple[idx_lhs:(idx_lhs + len(lhs))]
+                rhs_value = tuple[idx_rhs:(idx_rhs + len(rhs))]
+                # the lhs_value is already in the table; now we can check if consistency remains
+                if lhs_value in dict_check:
+                    dict_check[lhs_value] = set()
+                    dict_check[lhs_value].insert(rhs_value)
+                else:
+                    dict_check[lhs_value].insert(rhs_value)
+                    # if any set has more than one object it implies RHS -> LHS has been violated
+                    if len(dict_check[lhs_value]) > 1:
+                        print("This breaks the consistency implied by the FD's")
+                        return False
 
         # add tuple
         self.tuples[k] = t
