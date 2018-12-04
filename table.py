@@ -81,10 +81,10 @@ class Table:
         self.fds = tmp_fds
         return "The fd: " + fd_to_rm + " was successfully removed."
 
-    def add_mvd(self, mvd_split):
+    def add_mvd(self, mvd):
 
         try:
-            lhs, rhs = fd.split("->->")
+            lhs, rhs = mvd.split("->->")
         except ValueError:  # if can't split & unpack into 2 separate values
             print("Must have a LHS & RHS!")
             return False

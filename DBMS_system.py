@@ -1,12 +1,16 @@
 
 from table import Table
 from attribute import Attribute
+from database import Database
 
 def create_table():
     tabel_name = input("Please input new table name:")
     attrs = []
+
+    print("Please input at least one attribute. Input 'quit' at any time to stop.")
+    
     while True:
-        input_str = input("Please input the name and type (use , as delimiter) for one attribute(or input quit to stop):")
+        input_str = input("Please input the name and type (use , as delimiter) for one attribute:")
         if input_str == "quit":
             if len(attrs) == 0:
                 print("You need to input at least 1 attribute for the new tabel")
@@ -20,7 +24,8 @@ def create_table():
                 attrs.append(Attribute(input_split[0], input_split[1]))
                 print("Add a new attribute for table " + tabel_name + " successfully")
 
-    new_table = Table(tabel_name, attrs)
+    db = Database()
+    new_table = Table(db,tabel_name, attrs)
 
     print("Please input at least one constraint. Input 'quit' at any time to stop.")
     
@@ -36,8 +41,7 @@ def create_table():
         input_str = input("Please input FD:")
         if input_str == "quit":
             break
-        input_split = input_str.split("->")
-        feedback = new_table.add_fd(input_split)
+        feedback = new_table.add_fd(input_str)
         print(feedback)
             
     while True:
@@ -45,8 +49,7 @@ def create_table():
         input_str = input("Please input MVD:")
         if input_str == "quit":
             break
-        input_split = input_str.replace(" ","").split("->")
-        feedback = new_table.add_mvd(input_split)
+        feedback = new_table.add_mvd(input_str)
         print(feedback)
 
     return new_table
