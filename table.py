@@ -332,7 +332,7 @@ class Table:
 
     def add_tuple(t):
         # need a master key before beginning to add tuples
-        if self.master_key = "":
+        if self.master_key == "":
             self.user_define_key()
 
         # pick out the master key from the input tuple
