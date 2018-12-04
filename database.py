@@ -1,3 +1,5 @@
+import os, sys
+
 class Database:
 
     def __init__(self):
@@ -5,12 +7,14 @@ class Database:
         self.tables = {}
 
     def add_table(self, table):
+        decision == 'y'
         # check if table already in DB and warn user
         if table.name in self.tables:
             print("There is already a table named " + table.name + "\n")
             decision = input("Would you like to overwrite it (y/n)?")
         if decision == 'y':
             self.tables[table.name] = table
+            table.parent_database = self
             return True
         else:
             return False
@@ -24,15 +28,17 @@ class Database:
             return False
 
     # TODO: write out the database (and all tables) to ASCII text doc
-    def write_database(self):
+    def write_database(self, path = ""):
         pass
 
     # TODO: read-in database from an ASCII text doc
-    def read_database(self):
+    def read_database(self, path):
         pass
 
-    def write_table(self, table):
+    # TODO: write out specific table to ASCII text doc
+    def write_table(self, table, path = ""):
         pass
 
+    # TODO: read-in specific table to ASCII text doc
     def read_table(self, path):
         pass

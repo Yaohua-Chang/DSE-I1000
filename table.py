@@ -4,7 +4,7 @@ class Table:
     # CONSTRUCTOR #
     ###############
 
-    def __init__(self, name, attributes, delimiter = "->"):
+    def __init__(self, db, name, attributes, delimiter = "->"):
         self.name = name
         self.attributes = sorted(attributes)
         self.attributes_names = []
@@ -18,6 +18,7 @@ class Table:
         self.right_list = []
         self.nf = ""
         self.tuples = {}
+        self.parent_database = db  # need reference to Database object for foreign keys
 
         for attr in attributes:
             self.attributes_names.append(attr.name)
@@ -78,7 +79,7 @@ class Table:
         fd_to_rm = fd_split[0] + "->" + fd_split[1]
         tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
         self.fds = tmp_fds
-        return "The fd: " + fd " was successfully removed."
+        return "The fd: " + fd_to_rm " was successfully removed."
 
     def add_mvd(self, mvd_split):
 
@@ -86,7 +87,7 @@ class Table:
         right_set = set(fd_split[1])
 
         # check defining mvd for table of 2 attr
-        if len(self.attributes <= 2):
+        if len(self.attributes) <= 2:
             return "MVD trivial for a table with <= 2 attributes"
         # check invalid input
         if len(mvd_split) != 2:
@@ -340,13 +341,17 @@ class Table:
                 # the lhs_value is already in the table; now we can check if consistency remains
                 if lhs_value in dict_check:
                     dict_check[lhs_value] = set()
-                    dict_check[lhs_value].insert(rhs_value)
+                    dict_check[lhs_value].add(rhs_value)
                 else:
-                    dict_check[lhs_value].insert(rhs_value)
+                    dict_check[lhs_value].add(rhs_value)
                     # if any set has more than one object it implies RHS -> LHS has been violated
+                    # b/c RHS points to 2 distinct values of LHS
                     if len(dict_check[lhs_value]) > 1:
-                        print("This breaks the consistency implied by the FD's")
+                        print("This breaks the consistency implied by the FD: " + fd)
                         return False
+
+        # check for foreign key
+        # for table_name in self.parent_database.tables.keys():
 
         # add tuple
         self.tuples[k] = t
