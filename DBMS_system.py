@@ -8,7 +8,7 @@ def create_table():
     attrs = []
 
     print("Please input at least one attribute. Input 'quit' at any time to stop.")
-    
+
     while True:
         input_str = input("Please input the name and type (use , as delimiter) for one attribute:")
         if input_str == "quit":
@@ -43,7 +43,6 @@ def create_table():
             break
         feedback = new_table.add_fd(input_str)
         print(feedback)
-        new_table.fds = list(set(new_table.fds)) #Ensuring unique FDs only
 
     while True:
 
@@ -73,7 +72,7 @@ def update_normal_form(table):
             done = False
             while not done:
                 input_str = input("Type \'a\' to add a new FD or \'d\' to delete a FD':")
-                if input_str == 'a':      
+                if input_str == 'a':
                     new_fd = input("Add a new FD: ")
                     feedback = table.add_fd(new_fd.replace(" ",""))
                     print(feedback)
@@ -81,7 +80,7 @@ def update_normal_form(table):
                     again = input("The table now has normal form " + table.nf + " would you like to continue (y/n)?")
                     if again == 'n':
                         done = True
-                
+
                 elif input_str == 'd':
                     del_fd = input("Enter FD to be deleted: ")
                     feedback = table.remove_fd(del_fd.replace(" ",""))
@@ -92,7 +91,7 @@ def update_normal_form(table):
                         done = True
                 else:
                     print("That's not a valid decision!")
-                                  
+
         else:
             print("That's not a valid decision!")
 

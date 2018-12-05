@@ -65,23 +65,22 @@ class Table:
         # remove trivial FDs
         if set(rhs).issubset(set(lhs)):
             return "This is trivial FD"
-        
+
         # add fd
         if fd not in self.seen_fd:
             if len(rhs) != 1: #Convert fds to non-trivial form if RHS has more than 1 attribute
                 for element in rhs:
                     f_d = lhs + "->" + element
-                    self.fds.append(f_d)
-                    self.seen_fd.add(f_d)
+                    self.fds.append(fd)
+                    self.seen_fd.add(fd)
             else:
                 self.fds.append(fd)
                 self.seen_fd.add(fd)
         else:
             return "The fd: " + fd + " has already been added!"
-        
-        
+
         # add mvd that is implied from this fd
-        #self.mvds.append(lhs + "->->" + rhs)
+        self.mvds.append(lhs + "->->" + rhs)
 
         return "Added a new fd successfully: " + fd
 
@@ -107,11 +106,9 @@ class Table:
         if set(rhs).issubset(lhs):
             return "This is a trivial mvd"
 
-        for fd in self.fds:
-            fd_lhs, fd_rhs = fd.split("->")
-            if lhs == fd_lhs and rhs ==fd_rhs:
-                return "MVD that is trivialized by an existing FD"
-        
+        if mvd.replace("->->","->") in self.seen_fd:
+            return "MVD that is trivialized by an existing FD"
+
         self.mvds.append(lhs + "->->" + rhs)
 
         return "Added a new mvd successfully: " + mvd
@@ -128,7 +125,7 @@ class Table:
                     for attr in self.attributes:
                         if attr.name == input_split[0]:
                             less_than_value = int(input_split[1])
-                            if attr.more_than_value != None: 
+                            if attr.more_than_value != None:
                                 if less_than_value > attr.more_than_value:
                                     attr.set_less_than_value(less_than_value)
                                     return "Add boolean conditions -- successfully"
@@ -137,7 +134,7 @@ class Table:
                             else:
                                 attr.set_less_than_value(less_than_value)
                                 return "Add boolean conditions -- successfully"
-                            
+
         elif ">" in input_str:
             input_split = input_str.replace(" ","").split('>')
             if len(input_split)!=2 or input_split[1] == "":
@@ -149,7 +146,7 @@ class Table:
                     for attr in self.attributes:
                         if attr.name == input_split[0]:
                             more_than_value = int(input_split[1])
-                            if attr.less_than_value != None: 
+                            if attr.less_than_value != None:
                                 if more_than_value < attr.less_than_value:
                                     attr.set_more_than_value(more_than_value)
                                     return "Add boolean conditions successfully"
@@ -239,7 +236,7 @@ class Table:
         non_prime_attrs = set(self.attributes_names)
         for key in self.keys:
             non_prime_attrs -= set(key)
-            
+
         for key in self.keys:
             for lhs in self.left_list:
                 if set(lhs).issubset(set(key)) and set(lhs) != set(key) and set(self.right_list[i]).issubset(non_prime_attrs):
@@ -265,12 +262,12 @@ class Table:
         return False
 
     def get_normal_form(self):
-  
+
         for fd in self.fds:
             fd_split = fd.split("->")
             self.left_list.append(fd_split[0])
             self.right_list.append(fd_split[1])
-        
+
         if self.determine_1NF():
             self.nf = "1NF"
         elif self.determine_2NF():
@@ -282,7 +279,7 @@ class Table:
         print("This table has normal form: " + self.nf)
         return self.nf
 
-    
+
     ##########
     # TUPLES #
     ##########
