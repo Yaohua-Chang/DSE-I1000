@@ -18,6 +18,7 @@ D>
 G
 C<6
 C>8
+A
 
 Correct Input for boolean condition
 A>10
@@ -30,9 +31,13 @@ G->H
 AB->B
 A->->B
 A->B A->B
+*AB -> BCD
+
 
 Correct Input for fd
 C->D
+A->BCD
+AB->C
 
 Error Input for mvd
 A->->B
@@ -40,6 +45,17 @@ B->D
 
 Correct Input for mvd
 B->->C
+A->->BC
+
+Closure test:
+AB->CD and CD->B, then closure AB = {'A', 'B', 'C', 'D'}
+
+Key:
+AB->CD and CD->B, then key = {'AB', 'CDA'}
+
+Normal form:
+AB->C, C->D then 1NF
+AB->CD, CD->A then 3NF
 
 
 
