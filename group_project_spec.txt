@@ -1,0 +1,67 @@
+Spec for group project: a prototype DBMS system (finalized)
+
+Due date: 12/10/18
+what to submit: 1. source code
+		2. a file with sample running results 
+		3. a readme file explaining how to compile/run your program 
+
+Note: 1. GUI is not required
+      2. this is a group project, one group having up to 3 members 
+      3. zero-tolerance of cheating 
+      4. you can re-use _your own_ codes in the assignment, including 
+         all members inside your group (~30% of this project are  
+         essentially your first assignment). 
+ 
+Your system contains the following functionality: 
+ 
+I. Data Definition part: 
+   a. define new tables: table name, attribute names and types  
+   b. for each defined table ask users to input possible constraints, 
+      including Boolean conditions, FDs and MVDs (in this order): 
+      The legitimacy of constrains should be checked: 
+      1. ignore conflicting Boolean conditions such as A>10 and  
+         A<5; 
+      2. trivial and redundant FDs should be denied entry with a  
+         feedback to the user; 
+      3. Users have the choice to remove some FDs; 
+      4. trivial MVD or MVD that is trivialized by an existing FD, 
+         e.g., A->->B is trivialized by A->B or table with only two  
+	 attributes AB. 
+      5. foreign key designation, e.g., ssn in table roster is the 
+         key in table student. If one wants to input a tuple in roster 
+         and the ssn is non-existent, the user will be prompted to  
+         either quit the input or inserting a new tuple to the student 
+         table. if one wants to delete a record in table student,  
+         corresponding tuples in roster should also be deleted. 
+   c. Evaluate the NF category for the user defined DB, ask user to  
+      either delete the entire table or add/remove FDs to boost 1 or 
+      2NF tables to at least 3NF. 
+   d. ask users to define keys for each table, if the user-defined keys 
+      disagree the keys reached by its FDs, deny them and make viable 
+      suggestions to the users. 
+ 
+II. Data Manipulation part: 
+   a. users can input new tuples to all tables, your system should 
+      deny those that violate FDs. The foreign key designation may 
+      demand additional tuples in other tables (see the example in 
+      I.c). 
+   b. users can delete a tuple based on key value, and again take 
+      care of the cross-table dependencies 
+   c. users can perform actions below for one table: 
+      i) find tuples that satisfy conditions for some attributes 
+      ii) group tuples based on one or several chosen attribute 
+   d. users can choose to perform the following operators for two 
+      tables:  
+       cross join, natural join, union, intersection, difference 
+   e. users can delete a table and ensure the across-table integrity. 
+ 
+ To reduce the complexity of your program, the following constraints 
+ are in effect: 
+   1. _at most_ four attributes for a table. 
+   2. single character (upper case) attribute names. 
+   3. the type for ALL attributes is either string or integer. 
+   4. for boolean conditions, only "attr op value" is allowed. For 
+      string type attribute, operator can only be == or <>; for int 
+      type attribute, operator can be >, >=, ==, <>, <, and <=. No 
+      need for other forms. 
+}

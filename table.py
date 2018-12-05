@@ -13,6 +13,8 @@ class Table:
         self.superkeys = set()
         self.fds = []
         self.mvds = []
+        self.left_list = [] #For NF check
+        self.right_list = [] #For NF check
         self.delimiter = delimiter
         self.seen_fd = set()
         self.nf = ""
@@ -30,6 +32,9 @@ class Table:
 
     def print_fds(self):
         print("The table named: ", self.name, "\nHas FD's: ", self.fds)
+
+    def print_mvds(self):
+        print("The table named: ", self.name, "\nHas MVD's: ", self.mvds)
 
     def print_boolean_conditions(self):
         print("The table named: ", self.name, " has boolean conditions:")
@@ -51,30 +56,34 @@ class Table:
         try:
             lhs, rhs = fd.split(self.delimiter)
         except ValueError:  # if can't split & unpack into 2 separate values
-            print("Must have a LHS & RHS!")
-            return False
+            return "Must have a LHS & RHS!"
 
         # check for attributes not in table
         if not set(lhs).issubset(self.attributes_names) or not set(rhs).issubset(self.attributes_names):
-            return "This is wrong FD. There is no all attributes of FD in the table"
+            return "This is wrong FD. There is no such attribute in the table"
 
         # remove trivial FDs
         if set(rhs).issubset(set(lhs)):
             return "This is trivial FD"
-
+        
         # add fd
         if fd not in self.seen_fd:
-            self.fds.append(lhs + self.delimiter + rhs)
-            self.seen_fd.add(fd)
+            if len(rhs) != 1: #Convert fds to non-trivial form if RHS has more than 1 attribute
+                for element in rhs:
+                    f_d = lhs + "->" + element
+                    self.fds.append(f_d)
+                    self.seen_fd.add(f_d)
+            else:
+                self.fds.append(fd)
+                self.seen_fd.add(fd)
         else:
-            print("The fd: " + fd + " has already been added!")
-            return False
-
+            return "The fd: " + fd + " has already been added!"
+        
+        
         # add mvd that is implied from this fd
-        self.mvds.append(lhs + "->->" + rhs)
+        #self.mvds.append(lhs + "->->" + rhs)
 
-        print("Added a new fd successfully: " + fd)
-        return True
+        return "Added a new fd successfully: " + fd
 
     def remove_fd(self, fd_to_rm):
         tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
@@ -86,19 +95,23 @@ class Table:
         try:
             lhs, rhs = mvd.split("->->")
         except ValueError:  # if can't split & unpack into 2 separate values
-            print("Must have a LHS & RHS!")
-            return False
+            return "Must have a LHS & RHS!"
 
         # check defining mvd for table of 2 attr
         if len(self.attributes) <= 2:
             return "MVD trivial for a table with <= 2 attributes"
         # check attr not in table
-        if not lhs.issubset(self.attributes_names) or not rhs.issubset(self.attributes_names):
-            return "This is wrong MVD. There is no all attributes of MVD in the table"
+        if not set(lhs).issubset(self.attributes_names) or not set(rhs).issubset(self.attributes_names):
+            return "This is wrong MVD. There is no such attribute in the table"
         # remove trivial mvd
-        if rhs.issubset(lhs):
+        if set(rhs).issubset(lhs):
             return "This is a trivial mvd"
 
+        for fd in self.fds:
+            fd_lhs, fd_rhs = fd.split("->")
+            if lhs == fd_lhs and rhs ==fd_rhs:
+                return "MVD that is trivialized by an existing FD"
+        
         self.mvds.append(lhs + "->->" + rhs)
 
         return "Added a new mvd successfully: " + mvd
@@ -106,7 +119,7 @@ class Table:
     def add_boolean_conditions(self, input_str):
         if "<" in input_str:
             input_split = input_str.replace(" ","").split('<')
-            if len(input_split) != 2:
+            if len(input_split) != 2 or input_split[1] == "":
                 return "This is invaild input."
             else:
                 if not input_split[0] in self.attributes_names:
@@ -115,17 +128,19 @@ class Table:
                     for attr in self.attributes:
                         if attr.name == input_split[0]:
                             less_than_value = int(input_split[1])
-                            if attr.more_than_value == None:
-                                attr.set_less_than_value(less_than_value)
-                                return "Add boolean conditions successfully"
-                            elif less_than_value > attr.more_than_value:
-                                attr.set_less_than_value(less_than_value)
-                                return "Add boolean conditions successfully"
+                            if attr.more_than_value != None: 
+                                if less_than_value > attr.more_than_value:
+                                    attr.set_less_than_value(less_than_value)
+                                    return "Add boolean conditions -- successfully"
+                                else:
+                                    return "This is conflicting Boolean conditions"
                             else:
-                                return "This is conflicting Boolean conditions"
+                                attr.set_less_than_value(less_than_value)
+                                return "Add boolean conditions -- successfully"
+                            
         elif ">" in input_str:
             input_split = input_str.replace(" ","").split('>')
-            if len(input_split)!=2:
+            if len(input_split)!=2 or input_split[1] == "":
                 return "This is invaild input."
             else:
                 if not input_split[0] in self.attributes_names:
@@ -134,63 +149,15 @@ class Table:
                     for attr in self.attributes:
                         if attr.name == input_split[0]:
                             more_than_value = int(input_split[1])
-                            if attr.less_than_value == None:
-                                attr.set_more_than_value(more_than_value)
-                                return "Add boolean conditions successfully"
-                            elif more_than_value < attr.less_than_value:
-                                attr.set_more_than_value(more_than_value)
-                                return "Add boolean conditions successfully"
+                            if attr.less_than_value != None: 
+                                if more_than_value < attr.less_than_value:
+                                    attr.set_more_than_value(more_than_value)
+                                    return "Add boolean conditions successfully"
+                                else:
+                                    return "This is conflicting Boolean conditions"
                             else:
-                                return "This is conflicting Boolean conditions"
-
-    ########
-    # FD'S #
-    ########
-
-    # this function can be removed (no need to use in any above functions; I removed it from up there)
-    def fd_split(self, fds):
-        for fd in self.fds:
-            fd_split = fd.split("->")
-            self.left_list.append(fd_split[0])
-            self.right_list.append(fd_split[1])
-
-    # this is redundant, should be handled by DBMS_system
-    # my take: any interface type functions can be handled by DBMS system which calls Table class methods
-    # like add_fd one at a time (or until user quits)
-    # same is true of get_closure below which I think we can delete
-    def add_fds(self, fd_str):
-
-        fds = fd_str.replace(" ", "").split(",")
-
-        # All trivial FDs, such as AB->B, and wrong FDs, are identified and ignored
-        fds_copy = fds.copy()
-        for fd in fds_copy:
-            fd_split = fd.split("->")
-            # remove wrong FD
-            if len(fd_split) != 2:
-                fds.remove(fd)
-                continue;
-
-            left_set = set(fd_split[0])
-            right_set = set(fd_split[1])
-            # remove the wrong FD
-            if not left_set.issubset(self.attributes) or not right_set.issubset(self.attributes):
-                fds.remove(fd)
-                continue;
-            # remove the trivial FD
-            if right_set.issubset(left_set):
-                fds.remove(fd)
-                continue;
-
-            # Convert those FDs not in the standard non-trivial forms to standard non-trival forms
-            if len(right_set) != 1:
-                for element in right_set:
-                    fds.append(fd_split[0] + "->" + element)
-                fds.remove(fd)
-        # Repeated FDs are identified and ignored
-        self.fds = sorted(set(fds))
-        self.fd_split(self.fds)
-        return self.fds
+                                attr.set_more_than_value(more_than_value)
+                                return "Add boolean conditions successfully"
 
     ###########
     # CLOSURE #
@@ -212,16 +179,6 @@ class Table:
                 if set(lhs_list[index]).issubset(outputs):
                     outputs.add(rhs_list[index])
         return outputs
-
-    # this is redundant; can be handled by DBMS
-    # see add_fds for more
-    def get_closure(self):
-        while True:
-            seed = input("Please type any set of attributes as the seed(or input quit to stop):")
-            if seed == "quit":
-                break
-            c = self.closure(seed)
-            print("The closure of {} is {}".format(sorted(set(seed)), sorted(c)))
 
     ########
     # KEYS #
@@ -278,14 +235,19 @@ class Table:
     ################
 
     def determine_1NF(self):
+        """Will update today"""
+        non_prime_attrs = set(self.attributes_names)
+        for key in self.keys:
+            non_prime_attrs -= set(key)
+            
         for key in self.keys:
             for lhs in self.left_list:
-                if set(lhs).issubset(set(key)) and set(lhs) != set(key):
+                if set(lhs).issubset(set(key)) and set(lhs) != set(key) and set(self.right_list[i]).issubset(non_prime_attrs):
                     return True
         return False
 
     def determine_2NF(self):
-        non_prime_attrs = set(self.attributes)
+        non_prime_attrs = set(self.attributes_names)
         for key in self.keys:
             non_prime_attrs -= set(key)
 
@@ -298,12 +260,17 @@ class Table:
         for key in self.keys:
             for i in range(len(self.right_list)) :
                 # for a dependency A → B, A cannot be a non-prime attribute, if B is a prime attribute.
-                if set(right_list[i]).issubset(key) and not set(left_list[i]).issubset(key):
+                if set(self.right_list[i]).issubset(key) and not set(self.left_list[i]).issubset(key):
                     return True
         return False
 
     def get_normal_form(self):
-
+  
+        for fd in self.fds:
+            fd_split = fd.split("->")
+            self.left_list.append(fd_split[0])
+            self.right_list.append(fd_split[1])
+        
         if self.determine_1NF():
             self.nf = "1NF"
         elif self.determine_2NF():
@@ -315,6 +282,7 @@ class Table:
         print("This table has normal form: " + self.nf)
         return self.nf
 
+    
     ##########
     # TUPLES #
     ##########
@@ -351,9 +319,9 @@ class Table:
                     dict_check[lhs_value].add(rhs_value)
                     # if any set has more than one object it implies RHS -> LHS has been violated
                     # b/c RHS points to 2 distinct values of LHS
-                    if len(dict_check[lhs_value]) > 1:
-                        print("This breaks the consistency implied by the FD: " + fd)
-                        return False
+                if len(dict_check[lhs_value]) > 1:
+                    print("This breaks the consistency implied by the FD: " + fd)
+                    return False
 
         # check for foreign key
         # for table_name in self.parent_database.tables.keys():
@@ -362,3 +330,9 @@ class Table:
         self.tuples[k] = t
 
         return True
+
+    def get_tuple(k):
+        try:
+            return self.tuples[k]
+        except KeyError:
+            print("There is no tuple with key: " + k)
