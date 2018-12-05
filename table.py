@@ -13,6 +13,8 @@ class Table:
         self.superkeys = set()
         self.fds = []
         self.mvds = []
+        self.left_list = [] #For NF check
+        self.right_list = [] #For NF check
         self.delimiter = delimiter
         self.seen_fd = set()
         self.nf = ""
@@ -56,20 +58,27 @@ class Table:
 
         # check for attributes not in table
         if not set(lhs).issubset(self.attributes_names) or not set(rhs).issubset(self.attributes_names):
-            return "This is wrong FD. There is no all attributes of FD in the table"
+            return "This is wrong FD. There is no such attribute in the table"
 
         # remove trivial FDs
         if set(rhs).issubset(set(lhs)):
             return "This is trivial FD"
-
+        
         # add fd
         if fd not in self.seen_fd:
-            self.fds.append(fd)
-            self.seen_fd.add(fd)
+            if len(rhs) != 1: #Convert fds to non-trivial form if RHS has more than 1 attribute
+                for element in rhs:
+                    f_d = lhs + "->" + element
+                    self.fds.append(f_d)
+                    self.seen_fd.add(f_d)
+            else:
+                self.fds.append(fd)
+                self.seen_fd.add(fd)
         else:
             print("The fd: " + fd + " has already been added!")
             return False
-
+        
+        
         # add mvd that is implied from this fd
         self.mvds.append(lhs + "->->" + rhs)
 
@@ -81,10 +90,10 @@ class Table:
         self.fds = tmp_fds
         return "The fd: " + fd_to_rm + " was successfully removed."
 
-    def add_mvd(self, mvd_split):
+    def add_mvd(self, mvd):
 
         try:
-            lhs, rhs = fd.split("->->")
+            lhs, rhs = mvd.split("->->")
         except ValueError:  # if can't split & unpack into 2 separate values
             print("Must have a LHS & RHS!")
             return False
@@ -93,10 +102,10 @@ class Table:
         if len(self.attributes) <= 2:
             return "MVD trivial for a table with <= 2 attributes"
         # check attr not in table
-        if not lhs.issubset(self.attributes_names) or not rhs.issubset(self.attributes_names):
-            return "This is wrong MVD. There is no all attributes of MVD in the table"
+        if not set(lhs).issubset(self.attributes_names) or not set(rhs).issubset(self.attributes_names):
+            return "This is wrong MVD. There is no such attribute in the table"
         # remove trivial mvd
-        if rhs.issubset(lhs):
+        if set(rhs).issubset(lhs):
             return "This is a trivial mvd"
 
         self.mvds.append(lhs + "->->" + rhs)
@@ -115,14 +124,16 @@ class Table:
                     for attr in self.attributes:
                         if attr.name == input_split[0]:
                             less_than_value = int(input_split[1])
-                            if attr.more_than_value == None:
-                                attr.set_less_than_value(less_than_value)
-                                return "Add boolean conditions successfully"
-                            elif less_than_value > attr.more_than_value:
-                                attr.set_less_than_value(less_than_value)
-                                return "Add boolean conditions successfully"
+                            if attr.more_than_value != None: 
+                                if less_than_value > attr.more_than_value:
+                                    attr.set_less_than_value(less_than_value)
+                                    return "Add boolean conditions -- successfully"
+                                else:
+                                    return "This is conflicting Boolean conditions"
                             else:
-                                return "This is conflicting Boolean conditions"
+                                attr.set_less_than_value(less_than_value)
+                                return "Add boolean conditions -- successfully"
+                            
         elif ">" in input_str:
             input_split = input_str.replace(" ","").split('>')
             if len(input_split)!=2:
@@ -134,14 +145,15 @@ class Table:
                     for attr in self.attributes:
                         if attr.name == input_split[0]:
                             more_than_value = int(input_split[1])
-                            if attr.less_than_value == None:
-                                attr.set_more_than_value(more_than_value)
-                                return "Add boolean conditions successfully"
-                            elif more_than_value < attr.less_than_value:
-                                attr.set_more_than_value(more_than_value)
-                                return "Add boolean conditions successfully"
+                            if attr.less_than_value != None: 
+                                if more_than_value < attr.less_than_value:
+                                    attr.set_more_than_value(more_than_value)
+                                    return "Add boolean conditions successfully"
+                                else:
+                                    return "This is conflicting Boolean conditions"
                             else:
-                                return "This is conflicting Boolean conditions"
+                                attr.set_more_than_value(more_than_value)
+                                return "Add boolean conditions successfully"
 
     ###########
     # CLOSURE #
@@ -219,14 +231,19 @@ class Table:
     ################
 
     def determine_1NF(self):
+        """Will update today"""
+        non_prime_attrs = set(self.attributes_names)
+        for key in self.keys:
+            non_prime_attrs -= set(key)
+            
         for key in self.keys:
             for lhs in self.left_list:
-                if set(lhs).issubset(set(key)) and set(lhs) != set(key):
+                if set(lhs).issubset(set(key)) and set(lhs) != set(key) and set(self.right_list[i]).issubset(non_prime_attrs):
                     return True
         return False
 
     def determine_2NF(self):
-        non_prime_attrs = set(self.attributes)
+        non_prime_attrs = set(self.attributes_names)
         for key in self.keys:
             non_prime_attrs -= set(key)
 
@@ -239,12 +256,17 @@ class Table:
         for key in self.keys:
             for i in range(len(self.right_list)) :
                 # for a dependency A → B, A cannot be a non-prime attribute, if B is a prime attribute.
-                if set(right_list[i]).issubset(key) and not set(left_list[i]).issubset(key):
+                if set(self.right_list[i]).issubset(key) and not set(self.left_list[i]).issubset(key):
                     return True
         return False
 
     def get_normal_form(self):
-
+  
+        for fd in self.fds:
+            fd_split = fd.split("->")
+            self.left_list.append(fd_split[0])
+            self.right_list.append(fd_split[1])
+        
         if self.determine_1NF():
             self.nf = "1NF"
         elif self.determine_2NF():
@@ -256,6 +278,7 @@ class Table:
         print("This table has normal form: " + self.nf)
         return self.nf
 
+    
     ##########
     # TUPLES #
     ##########
