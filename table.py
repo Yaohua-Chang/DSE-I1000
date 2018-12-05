@@ -143,55 +143,6 @@ class Table:
                             else:
                                 return "This is conflicting Boolean conditions"
 
-    ########
-    # FD'S #
-    ########
-
-    # this function can be removed (no need to use in any above functions; I removed it from up there)
-    def fd_split(self, fds):
-        for fd in self.fds:
-            fd_split = fd.split("->")
-            self.left_list.append(fd_split[0])
-            self.right_list.append(fd_split[1])
-
-    # this is redundant, should be handled by DBMS_system
-    # my take: any interface type functions can be handled by DBMS system which calls Table class methods
-    # like add_fd one at a time (or until user quits)
-    # same is true of get_closure below which I think we can delete
-    def add_fds(self, fd_str):
-
-        fds = fd_str.replace(" ", "").split(",")
-
-        # All trivial FDs, such as AB->B, and wrong FDs, are identified and ignored
-        fds_copy = fds.copy()
-        for fd in fds_copy:
-            fd_split = fd.split("->")
-            # remove wrong FD
-            if len(fd_split) != 2:
-                fds.remove(fd)
-                continue;
-
-            left_set = set(fd_split[0])
-            right_set = set(fd_split[1])
-            # remove the wrong FD
-            if not left_set.issubset(self.attributes) or not right_set.issubset(self.attributes):
-                fds.remove(fd)
-                continue;
-            # remove the trivial FD
-            if right_set.issubset(left_set):
-                fds.remove(fd)
-                continue;
-
-            # Convert those FDs not in the standard non-trivial forms to standard non-trival forms
-            if len(right_set) != 1:
-                for element in right_set:
-                    fds.append(fd_split[0] + "->" + element)
-                fds.remove(fd)
-        # Repeated FDs are identified and ignored
-        self.fds = sorted(set(fds))
-        self.fd_split(self.fds)
-        return self.fds
-
     ###########
     # CLOSURE #
     ###########
@@ -212,16 +163,6 @@ class Table:
                 if set(lhs_list[index]).issubset(outputs):
                     outputs.add(rhs_list[index])
         return outputs
-
-    # this is redundant; can be handled by DBMS
-    # see add_fds for more
-    def get_closure(self):
-        while True:
-            seed = input("Please type any set of attributes as the seed(or input quit to stop):")
-            if seed == "quit":
-                break
-            c = self.closure(seed)
-            print("The closure of {} is {}".format(sorted(set(seed)), sorted(c)))
 
     ########
     # KEYS #
