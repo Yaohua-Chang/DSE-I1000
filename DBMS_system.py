@@ -1,4 +1,4 @@
-
+from database import Database
 from table import Table
 from attribute import Attribute
 
@@ -23,8 +23,8 @@ def create_table():
     new_table = Table(tabel_name, attrs)
 
     print("Please input at least one constraint. Input 'quit' at any time to stop.")
-    
-    while True:        
+
+    while True:
         input_str = input("Please input Boolean condition:")
         if input_str == "quit":
             break
@@ -36,17 +36,15 @@ def create_table():
         input_str = input("Please input FD:")
         if input_str == "quit":
             break
-        input_split = input_str.split("->")
-        feedback = new_table.add_fd(input_split)
+        feedback = new_table.add_fd(input_str)
         print(feedback)
-            
+
     while True:
 
         input_str = input("Please input MVD:")
         if input_str == "quit":
             break
-        input_split = input_str.replace(" ","").split("->")
-        feedback = new_table.add_mvd(input_split)
+        feedback = new_table.add_mvd(input_str)
         print(feedback)
 
     return new_table
