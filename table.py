@@ -1,3 +1,5 @@
+import random
+
 class Table:
 
     ###############
@@ -20,6 +22,18 @@ class Table:
         self.nf = ""
         self.tuples = {}
         self.parent_database = db  # need reference to Database object for foreign keys
+
+    def __repr__(self):
+        str = "Table: " + self.name + "\n\r"
+        for name in sorted(self.attributes_names):
+            str += " | " + name
+        str += " |\n\r" + "-" * 5 * len(self.attributes)
+        for k in self.tuples:
+            str += "\n\r | "
+            t = self.tuples[k]
+            for c in t:
+                str += c + " | "
+        return str
 
     #########
     # PRINT #
@@ -72,7 +86,7 @@ class Table:
                 for element in rhs:
                     f_d = lhs + "->" + element #Not typo. f_d is not fd below
                     self.fds.append(f_d) #Not typo
-                    self.seen_fd.add(f_d) 
+                    self.seen_fd.add(f_d)
             else:
                 self.fds.append(fd)
                 self.seen_fd.add(fd)
@@ -200,7 +214,7 @@ class Table:
                     if set(lhs_list[index]).issubset(outputs):
                         outputs.add(rhs_list[index])
 
-            diff_attrs_outputs = set(self.attributes_names).difference(outputs)
+            diff_attrs_outputs = self.attributes_names.difference(outputs)
             for element in diff_attrs_outputs:
                 seed = seed + str(element)
             keys.add(seed)
@@ -220,16 +234,24 @@ class Table:
         return self.keys
 
     def print_keys(self):
+        if len(self.keys) == 0:
+            self.get_keys()
         print("All keys for this table are : ", str(self.keys))
 
-    def user_define_key(self, k):
+    def user_define_key(self):
+        k = input("What key would you like to use? (type \'rand\' to have it selected for you): ")
+        if k == "rand":
+            self.master_key = random.sample(self.keys,1)[0]
+            print("You have been given the key: " + self.master_key)
+            return True
         valid_key = k in self.keys
         while not valid_key:
             print("Unfortunately that's not a viable key. Here are you options:\n" + str(table.keys))
             k = input("Try a different key: ")
             valid_key = k in self.keys
         print("Great selection! " + k + " is a viable key")
-        table.master_key = k
+        self.master_key = k
+        return True
 
     ################
     # NORMAL FORMS #
@@ -239,7 +261,7 @@ class Table:
         subkey = []
         for key in self.keys:
             subkey.extend(set(key))
-    
+
         for i in range(len(self.left_list)):
             for key in self.keys:
                 if  set(self.left_list[i]).issubset(set(key)) \
@@ -248,7 +270,7 @@ class Table:
         return False
 
     def determine_2NF(self):
-        non_prime_attrs = set(self.attributes_names)
+        non_prime_attrs = self.attributes_names
         for key in self.keys:
             non_prime_attrs -= set(key)
 
@@ -267,7 +289,7 @@ class Table:
 
     def get_normal_form(self):
         self.get_keys()
-        
+
         for fd in self.fds:
             fd_split = fd.split("->")
             self.left_list.append(fd_split[0])
@@ -290,31 +312,30 @@ class Table:
     ##########
 
     # TODO: foreign key designation
-    def add_tuple(t):
+    def add_tuple(self, t):
         # need a master key before beginning to add tuples
         if self.master_key == "":
             self.user_define_key()
 
         # pick out the master key from the input tuple
         k = ""
-        for i, c in enumerate(self.attributes_names):
+        for i, c in enumerate(sorted(self.attributes_names)):
             if c in self.master_key:
                 k += t[i]
 
         # check FD consistency
         for fd in self.fds:
             lhs, rhs = fd.split("->")
-            idx_lhs = self.attributes_names.index(lhs)
-            idx_rhs = self.attributes_names.index(rhs)
-
+            idx_lhs = sorted(list(self.attributes_names)).index(lhs)
+            idx_rhs = sorted(list(self.attributes_names)).index(rhs)
             # iterate over other tuples in table and check for consistency
             dict_check = {}
-            for tuple in self.tuples:
+            for key in self.tuples:
                 # pull out rhs & lhs from each tuple
-                lhs_value = tuple[idx_lhs:(idx_lhs + len(lhs))]
-                rhs_value = tuple[idx_rhs:(idx_rhs + len(rhs))]
+                lhs_value = ''.join(self.tuples[key][idx_lhs:(idx_lhs + len(lhs))])
+                rhs_value = ''.join(self.tuples[key][idx_rhs:(idx_rhs + len(rhs))])
                 # the lhs_value is already in the table; now we can check if consistency remains
-                if lhs_value in dict_check:
+                if lhs_value not in dict_check:
                     dict_check[lhs_value] = set()
                     dict_check[lhs_value].add(rhs_value)
                 else:
@@ -330,11 +351,10 @@ class Table:
 
         # add tuple
         self.tuples[k] = t
-
         return True
 
-    def get_tuple(k):
+    def get_tuple(key):
         try:
-            return self.tuples[k]
+            return self.tuples[key]
         except KeyError:
-            print("There is no tuple with key: " + k)
+            print("There is no tuple with key: " + key)
