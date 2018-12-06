@@ -346,7 +346,23 @@ class Table:
                     return False
 
         # check for foreign key
-        # for table in self.parent_database.tables.keys():
+        if self.parent_database:
+            for _, table in self.parent_database.tables.items():
+                # pull out the key of that table
+                if table == self:  # ignore the current table reference
+                    continue
+                if table.master_key == "":
+                    # add a key (table doesn't have one)
+                    print("The table " + table.name + " doesn't have a current master key. \n\r")
+                    table.user_define_key()
+                tmp_key = table.master_key
+                # does it exist in our current table's key?
+                for c in tmp_key:
+                    if c in self.master_key:
+                        # if so, where is it?
+                        pass # left off here; will finish today/tomorrow (Thurs/Fri)
+        else:
+            print("This table is not part of a database!")
 
         # add tuple
         self.tuples[k] = t

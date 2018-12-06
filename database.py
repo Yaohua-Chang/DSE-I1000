@@ -43,9 +43,9 @@ class Database:
         pass
 
     # TODO: write out specific table to ASCII text doc
-    def write_table(self, table, path = ""):
+    def write_table(self, table_name, path = ""):
         pass
 
-    # TODO: read-in specific table to ASCII text doc
+    # TODO: read-in specific table to ASCII text doc (this might be difficult)
     def read_table(self, path):
         pass
