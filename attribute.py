@@ -17,6 +17,9 @@ class Attribute:
     def __hash__(self):
         return hash(self.name)
 
+    def __repr__(self):
+        return "Attribute: " + self.name + "\n\rType: " + self.type
+
     def set_less_than_value(self, value):
          self.less_than_value = value
 
