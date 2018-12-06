@@ -6,7 +6,7 @@ class Table:
     # CONSTRUCTOR #
     ###############
 
-    def __init__(self, db, name, attributes, delimiter = "->"):
+    def __init__(self, name, attributes, delimiter = "->"):
         self.name = name
         self.attributes = sorted(attributes)
         self.attributes_names = set([a.name for a in attributes])
@@ -21,7 +21,7 @@ class Table:
         self.seen_fd = set()
         self.nf = ""
         self.tuples = {}
-        self.parent_database = db  # need reference to Database object for foreign keys
+        self.parent_database = None  # need reference to Database object for foreign keys
 
     def __repr__(self):
         out = "Table: " + self.name + "\n\r"
@@ -334,19 +334,19 @@ class Table:
                 lhs_value = ''.join(str(self.tuples[key][idx_lhs:(idx_lhs + len(lhs))]))
                 rhs_value = ''.join(str(self.tuples[key][idx_rhs:(idx_rhs + len(rhs))]))
                 # the lhs_value is already in the table; now we can check if consistency remains
+                # if any set has more than one object it implies RHS -> LHS has been violated
+                # b/c RHS points to 2 distinct values of LHS
                 if lhs_value not in dict_check:
                     dict_check[lhs_value] = set()
                     dict_check[lhs_value].add(rhs_value)
                 else:
                     dict_check[lhs_value].add(rhs_value)
-                    # if any set has more than one object it implies RHS -> LHS has been violated
-                    # b/c RHS points to 2 distinct values of LHS
                 if len(dict_check[lhs_value]) > 1:
                     print("This breaks the consistency implied by the FD: " + fd)
                     return False
 
         # check for foreign key
-        # for table_name in self.parent_database.tables.keys():
+        # for table in self.parent_database.tables.keys():
 
         # add tuple
         self.tuples[k] = t

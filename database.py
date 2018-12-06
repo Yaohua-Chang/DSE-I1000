@@ -6,8 +6,15 @@ class Database:
         # map the tables in the database with keys as table names for quick access
         self.tables = {}
 
+    def __repr__(self):
+
+        for table_name in self.tables:
+            print(self.tables[table_name])
+            print("\n\r")
+        return None
+
     def add_table(self, table):
-        decision == 'y'
+        decision = 'y'
         # check if table already in DB and warn user
         if table.name in self.tables:
             print("There is already a table named " + table.name + "\n")
