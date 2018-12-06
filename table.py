@@ -24,16 +24,16 @@ class Table:
         self.parent_database = db  # need reference to Database object for foreign keys
 
     def __repr__(self):
-        str = "Table: " + self.name + "\n\r"
+        out = "Table: " + self.name + "\n\r"
         for name in sorted(self.attributes_names):
-            str += " | " + name
-        str += " |\n\r" + "-" * 5 * len(self.attributes)
+            out += " | " + name
+        out += " |\n\r" + "-" * 5 * len(self.attributes)
         for k in self.tuples:
-            str += "\n\r | "
+            out += "\n\r | "
             t = self.tuples[k]
             for c in t:
-                str += c + " | "
-        return str
+                out += str(c) + " | "
+        return out
 
     #########
     # PRINT #
@@ -64,7 +64,6 @@ class Table:
     # CONSTRAINTS #
     ###############
 
-    # do we handle case of decomposition, i.e. AB->CD becomes AB->C & AB->D
     def add_fd(self, fd):
 
         try:
@@ -321,7 +320,7 @@ class Table:
         k = ""
         for i, c in enumerate(sorted(self.attributes_names)):
             if c in self.master_key:
-                k += t[i]
+                k += str(t[i])
 
         # check FD consistency
         for fd in self.fds:
@@ -332,8 +331,8 @@ class Table:
             dict_check = {}
             for key in self.tuples:
                 # pull out rhs & lhs from each tuple
-                lhs_value = ''.join(self.tuples[key][idx_lhs:(idx_lhs + len(lhs))])
-                rhs_value = ''.join(self.tuples[key][idx_rhs:(idx_rhs + len(rhs))])
+                lhs_value = ''.join(str(self.tuples[key][idx_lhs:(idx_lhs + len(lhs))]))
+                rhs_value = ''.join(str(self.tuples[key][idx_rhs:(idx_rhs + len(rhs))]))
                 # the lhs_value is already in the table; now we can check if consistency remains
                 if lhs_value not in dict_check:
                     dict_check[lhs_value] = set()
