@@ -70,9 +70,9 @@ class Table:
         if fd not in self.seen_fd:
             if len(rhs) != 1: #Convert fds to non-trivial form if RHS has more than 1 attribute
                 for element in rhs:
-                    f_d = lhs + "->" + element
-                    self.fds.append(fd)
-                    self.seen_fd.add(fd)
+                    f_d = lhs + "->" + element #Not typo. f_d is not fd below
+                    self.fds.append(f_d) #Not typo
+                    self.seen_fd.add(f_d) 
             else:
                 self.fds.append(fd)
                 self.seen_fd.add(fd)
@@ -85,9 +85,13 @@ class Table:
         return "Added a new fd successfully: " + fd
 
     def remove_fd(self, fd_to_rm):
-        tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
-        self.fds = tmp_fds
-        return "The fd: " + fd_to_rm + " was successfully removed."
+        if fd_to_rm not in self.fds:
+            return "Invalid input. FD does not exist"
+        else:
+            tmp_fds = [fd for fd in self.fds if fd != fd_to_rm]
+            self.fds = tmp_fds
+            self.seen_fd = set(tmp_fds)
+            return "The fd: " + fd_to_rm + " was successfully removed."
 
     def add_mvd(self, mvd):
 
@@ -128,12 +132,12 @@ class Table:
                             if attr.more_than_value != None:
                                 if less_than_value > attr.more_than_value:
                                     attr.set_less_than_value(less_than_value)
-                                    return "Add boolean conditions -- successfully"
+                                    return "Add boolean conditions successfully"
                                 else:
                                     return "This is conflicting Boolean conditions"
                             else:
                                 attr.set_less_than_value(less_than_value)
-                                return "Add boolean conditions -- successfully"
+                                return "Add boolean conditions successfully"
 
         elif ">" in input_str:
             input_split = input_str.replace(" ","").split('>')
@@ -232,14 +236,14 @@ class Table:
     ################
 
     def determine_1NF(self):
-        """Will update today"""
-        non_prime_attrs = set(self.attributes_names)
+        subkey = []
         for key in self.keys:
-            non_prime_attrs -= set(key)
-
-        for key in self.keys:
-            for lhs in self.left_list:
-                if set(lhs).issubset(set(key)) and set(lhs) != set(key) and set(self.right_list[i]).issubset(non_prime_attrs):
+            subkey.extend(set(key))
+    
+        for i in range(len(self.left_list)):
+            for key in self.keys:
+                if  set(self.left_list[i]).issubset(set(key)) \
+                and set(self.left_list[i]) != set(key) and not set(self.right_list[i]).issubset(set(subkey)):
                     return True
         return False
 
@@ -262,7 +266,8 @@ class Table:
         return False
 
     def get_normal_form(self):
-
+        self.get_keys()
+        
         for fd in self.fds:
             fd_split = fd.split("->")
             self.left_list.append(fd_split[0])
