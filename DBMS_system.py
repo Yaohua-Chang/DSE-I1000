@@ -26,7 +26,7 @@ def create_table():
 
     db = Database()
     new_table = Table(db,table_name, attrs)
-
+    
     print("Please input at least one constraint. Input 'quit' at any time to stop.")
 
     while True:
@@ -56,7 +56,6 @@ def create_table():
     return new_table
 
 def update_normal_form(table):
-    """Will update today"""
     if table.nf == "":
         table.get_normal_form()
 
@@ -71,7 +70,8 @@ def update_normal_form(table):
         elif decision == 'u':
             done = False
             while not done:
-                input_str = input("Type \'a\' to add a new FD or \'d\' to delete a FD':")
+                print("Current FD(s) in the table: " + str(table.fds) + "\n")
+                input_str = input("Type \'a\' to add a new FD or \'d\' to delete a FD: ")
                 if input_str == 'a':
                     new_fd = input("Add a new FD: ")
                     feedback = table.add_fd(new_fd.replace(" ",""))
@@ -85,10 +85,15 @@ def update_normal_form(table):
                     del_fd = input("Enter FD to be deleted: ")
                     feedback = table.remove_fd(del_fd.replace(" ",""))
                     print(feedback)
-                    new_nf = table.get_normal_form()
-                    again = input("The table now has normal form " + table.nf + " would you like to continue (y/n)?")
-                    if again == 'n':
-                        done = True
+                    if len(table.fds) == 0:
+                        print("The table has no FD left! Please start again")
+                        break
+                            
+                    else:
+                        new_nf = table.get_normal_form()
+                        again = input("The table now has normal form " + table.nf + " would you like to continue (y/n)?")
+                        if again == 'n':
+                            done = True
                 else:
                     print("That's not a valid decision!")
 
