@@ -12,9 +12,7 @@ C = Attribute("C", "string")
 D = Attribute("D", "string")
 E = Attribute("E", "integer")
 
-t_one = Table(db, "test1", [A,B,C,D,E])
-t_one.print_attributes()
-
+t_one = Table("test1", [A,B,C,D,E])
 
 # Adding  boolean conditions
 t_one.add_boolean_conditions("A>10")
@@ -88,7 +86,7 @@ t_one.add_mvd("")
 # what are we left with?
 t_one.print_mvds()
 
-
+print(t_one)
 
 # testing closure operator
 attr = "A"
