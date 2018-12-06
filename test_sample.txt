@@ -59,6 +59,13 @@ Normal form:
 AB->C, C->D then 1NF
 AB->CD, CD->A then 3NF
 
+Update NF:
+Given: ABCD, AB->C, A->B (1NF)
+Add: A->D (BCNF)
+then Remove: A->B (1NF)
+then Remove: AB->C ('FD does not exist)
+
+
 
 
 
