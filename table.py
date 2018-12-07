@@ -321,46 +321,50 @@ class Table:
         for i, c in enumerate(sorted(self.attributes_names)):
             if c in self.master_key:
                 k += str(t[i])
-
         # check FD consistency
         for fd in self.fds:
             lhs, rhs = fd.split("->")
-            idx_lhs = sorted(list(self.attributes_names)).index(lhs)
-            idx_rhs = sorted(list(self.attributes_names)).index(rhs)
-            # iterate over other tuples in table and check for consistency
-            dict_check = {}
-            for key in self.tuples:
-                # pull out rhs & lhs from each tuple
-                lhs_value = ''.join(str(self.tuples[key][idx_lhs:(idx_lhs + len(lhs))]))
-                rhs_value = ''.join(str(self.tuples[key][idx_rhs:(idx_rhs + len(rhs))]))
-                # the lhs_value is already in the table; now we can check if consistency remains
-                # if any set has more than one object it implies RHS -> LHS has been violated
-                # b/c RHS points to 2 distinct values of LHS
-                if lhs_value not in dict_check:
-                    dict_check[lhs_value] = set()
-                    dict_check[lhs_value].add(rhs_value)
-                else:
-                    dict_check[lhs_value].add(rhs_value)
-                if len(dict_check[lhs_value]) > 1:
-                    print("This breaks the consistency implied by the FD: " + fd)
-                    return False
+            # find the position of all the FD's components
+            idx_lhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in lhs]
+            idx_rhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in rhs]
 
-        # check for foreign key
+            dict_check = {}
+            tmp_tuples = self.tuples.copy()
+            tmp_tuples.update({k:t})
+            for key in tmp_tuples:
+                # pull out rhs & lhs of FD from each tuple
+                str_tup = ''.join(map(str, tmp_tuples[key]))
+                lhs_value, rhs_value = "", ""
+                for idx in idx_lhs:
+                    lhs_value += str_tup[idx]
+                for idx in idx_rhs:
+                    rhs_value += str_tup[idx]
+                if rhs_value in dict_check:
+                    dict_check[rhs_value].add(lhs_value)
+                    if len(dict_check[rhs_value]) > 1:
+                        # RHS points at two distinct LHS values; therefore violates prop. of FD
+                        print("This breaks the consistency implied by the FD: " + fd)
+                        return False
+                else:
+                    dict_check[rhs_value] = set()
+                    dict_check[rhs_value].add(lhs_value)
+
+        # TODO: check for foreign key
         if self.parent_database:
             for _, table in self.parent_database.tables.items():
                 # pull out the key of that table
                 if table == self:  # ignore the current table reference
                     continue
                 if table.master_key == "":
-                    # add a key (table doesn't have one)
+                    # add a key (currently table doesn't have one)
                     print("The table " + table.name + " doesn't have a current master key. \n\r")
                     table.user_define_key()
-                tmp_key = table.master_key
                 # does it exist in our current table's key?
-                for c in tmp_key:
+                for c in table.master_key:
                     if c in self.master_key:
-                        # if so, where is it?
-                        pass # left off here; will finish today/tomorrow (Thurs/Fri)
+                        # find index of the key attribute in this table
+                        idx = sorted(list(self.attributes_names)).index()
+                        pass
         else:
             print("This table is not part of a database!")
 
