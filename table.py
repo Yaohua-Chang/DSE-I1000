@@ -383,13 +383,21 @@ class Table:
     ############
 
     def group_by(self, attr_name):
-        # pick out index of being grouped by
-        idx_group = sorted(self.attributes_names).index(attr_name)
+        # pick out index of attribute being grouped by
+        grouping_dict = {}
+
+        # case of 1 attribute
+        if len(attr_name) == 1:
+            idx_group = sorted(self.attributes_names).index(attr_name)
+        else:
+            idx_group = [sorted(self.attributes_names).index(c) for c in attr_name]
         # iterate over available tuples & add values of grouped by attributes as keys to dict
         # while the keys for each tuples are included in the set() values of the dict
-        grouping_dict = {}
         for tuple_k, tuple_v in self.tuples.items():
-            tuple_attr = tuple_v[idx_group]
+            if len(attr_name) == 1:
+                tuple_attr = tuple_v[idx_group]
+            else:
+                tuple_attr = tuple([tuple_v[i] for i in idx_group])
             if tuple_attr not in grouping_dict:
                 grouping_dict[tuple_attr] = set()
             grouping_dict[tuple_attr].add(tuple_k)
@@ -400,4 +408,5 @@ class Table:
                 print(self.get_tuple(k))
             print("#" * 15)
 
+        # case of >1 attribute
         return grouping_dict
