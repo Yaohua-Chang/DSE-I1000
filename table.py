@@ -372,8 +372,32 @@ class Table:
         self.tuples[k] = t
         return True
 
-    def get_tuple(key):
+    def get_tuple(self, key):
         try:
             return self.tuples[key]
         except KeyError:
             print("There is no tuple with key: " + key)
+
+    ############
+    # GROUPING #
+    ############
+
+    def group_by(self, attr_name):
+        # pick out index of being grouped by
+        idx_group = sorted(self.attributes_names).index(attr_name)
+        # iterate over available tuples & add values of grouped by attributes as keys to dict
+        # while the keys for each tuples are included in the set() values of the dict
+        grouping_dict = {}
+        for tuple_k, tuple_v in self.tuples.items():
+            tuple_attr = tuple_v[idx_group]
+            if tuple_attr not in grouping_dict:
+                grouping_dict[tuple_attr] = set()
+            grouping_dict[tuple_attr].add(tuple_k)
+
+        for group in grouping_dict:
+            print("Grouping by: " + str(group))
+            for k in grouping_dict[group]:
+                print(self.get_tuple(k))
+            print("#" * 15)
+
+        return grouping_dict
