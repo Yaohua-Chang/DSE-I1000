@@ -382,15 +382,17 @@ class Table:
     # GROUPING #
     ############
 
-    def group_by(self, attr_name):
-        # pick out index of attribute being grouped by
-        grouping_dict = {}
-
-        # case of 1 attribute
+    def get_attr_idx(self, attr_name):
+        # pick out index of attributes
         if len(attr_name) == 1:
-            idx_group = sorted(self.attributes_names).index(attr_name)
+            return sorted(self.attributes_names).index(attr_name)
         else:
-            idx_group = [sorted(self.attributes_names).index(c) for c in attr_name]
+            return [sorted(self.attributes_names).index(c) for c in attr_name]
+
+    def group_by(self, attr_name):
+        grouping_dict = {}
+        idx_group = self.get_attr_idx(attr_name)
+
         # iterate over available tuples & add values of grouped by attributes as keys to dict
         # while the keys for each tuples are included in the set() values of the dict
         for tuple_k, tuple_v in self.tuples.items():
@@ -408,5 +410,32 @@ class Table:
                 print(self.get_tuple(k))
             print("#" * 15)
 
-        # case of >1 attribute
         return grouping_dict
+
+    def get_tuple_conditions(self, attr_name, values, conditions):
+        # pick out index of attributes being conditioned on
+        idx_attr = self.get_attr_idx(attr_name)
+        attr_dict = {}
+        if len(attr_name) != len(values) or len(attr_name) != len(condition):
+            print("Must have same number of attributes, values, and conditions!")
+        for i, v in enumerate(values):
+            statement = conditions[i] + " " + str(v)
+            attr_dict[statement] = set()  # store the keys satisfying the conditions
+            # iterate over tuples, picking out attribute & checking
+            for tuple_k, tuple_v in self.tuples.items():
+                val_to_check = tuple_v[i]
+                if conditions[i] == '>':
+                    if val_to_check > values[i]:
+                        attr_dict[statement].add(tuple_k)
+                elif conditions[i] == '<':
+                    if val_to_check < values[i]:
+                        attr_dict[statement].add(tuple_k)
+                elif conditions[i] == '<>':
+                    if val_to_check != values[i]:
+                        attr_dict[statement].add(tuple_k)
+                elif conditions[i] == '==':
+                    if val_to_check == values[i]:
+                        attr_dict[statement].add(tuple_k)
+                else:
+                    print("Incorrect condition, must be one of: <, >, <>, or == ")
+        return attr_dict
