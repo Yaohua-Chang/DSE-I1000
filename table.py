@@ -448,10 +448,10 @@ class Table:
                 # does it exist in our current table's key?
                 val_found = False
                 for c in table.master_key:
+                    current_idx = sorted(list(self.attributes_names)).index(c)
                     if c in self.master_key:
                         # what's the index in the other table?
                         other_idx = sorted(list(table.attributes_names)).index(c)
-                        current_idx = sorted(list(self.attributes_names)).index(c)
                         # iterate over the other table's tuples
                         for _, tuple in table.tuples.items():
                             if tuple[other_idx] == t[current_idx]:
