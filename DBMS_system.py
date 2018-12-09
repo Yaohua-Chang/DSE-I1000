@@ -3,7 +3,9 @@ from table import Table
 from attribute import Attribute
 from database import Database
 
+# Task I.a
 def create_table():
+    db = Database()
     table_name = input("Please input new table name:")
     attrs = []
 
@@ -24,10 +26,15 @@ def create_table():
                 attrs.append(Attribute(input_split[0], input_split[1]))
                 print("Successfully add a new attribute")
 
-    db = Database()
     new_table = Table(table_name, attrs)
     db.add_table(new_table)
-    
+    print("The tabel " + table_name + " have created successfully!")
+    print(new_table)
+
+    return new_table
+
+# Task I.b
+def create_constraint(table):   
     print("Please input at least one constraint. Input 'quit' at any time to stop.")
 
     while True:
@@ -46,6 +53,19 @@ def create_table():
         print(feedback)
 
     while True:
+        if len(new_table.fds) == 0:
+            break
+        else:
+            new_table.print_fds()
+        input_str = input("Do you want to remove some Fds(yes or no):")
+        if input_str == "no":
+            break
+        else:
+            input_str = input("Please input a Fd that you want to remove:")
+            feedback = new_table.remove_fd(input_str)
+            print(feedback)
+
+    while True:
 
         input_str = input("Please input MVD:")
         if input_str == "quit":
@@ -56,6 +76,7 @@ def create_table():
 
     return new_table
 
+# Task I.c
 def update_normal_form(table):
     if table.nf == "":
         table.get_normal_form()
@@ -102,6 +123,23 @@ def update_normal_form(table):
             print("That's not a valid decision!")
 
 if __name__ == "__main__":
-    new_table = create_table()
-    new_table.print_attributes()
-    new_table.print_boolean_conditions()
+    # new_table = create_table()
+    # new_table = create_constraint(new_table)
+    # new_table.print_attributes()
+    # new_table.print_boolean_conditions()
+
+    # Adding attributes
+    A = Attribute("A", "integer")
+    B = Attribute("B", "integer")
+    C = Attribute("C", "integer")
+    D = Attribute("D", "string")
+    E = Attribute("E", "integer")
+    F = Attribute("F", "string")
+
+    new_table = Table("test1", [A,B,C,D,E,F])
+    db = Database()
+    db.add_table(new_table)
+
+    new_table.add_fd("A->B")
+
+    update_normal_form(new_table)

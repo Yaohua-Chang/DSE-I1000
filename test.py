@@ -11,8 +11,9 @@ B = Attribute("B", "integer")
 C = Attribute("C", "integer")
 D = Attribute("D", "string")
 E = Attribute("E", "integer")
+F = Attribute("F", "string")
 
-t_one = Table("test1", [A,B,C,D,E])
+t_one = Table("test1", [A,B,C,D,E,F])
 
 # Adding  boolean conditions
 t_one.add_boolean_conditions("A>10")
@@ -39,16 +40,20 @@ t_one.print_boolean_conditions()
 
 
 # Adding fd's
-t_one.add_fd("A->B")
+# t_one.add_fd("AB->C")
+# t_one.add_fd("BC->A")
+# t_one.add_fd("BC->D")
+# t_one.add_fd("CF->B")
+
 # adding repeated fd
-t_one.add_fd("A->B")
+#t_one.add_fd("A->B")
 
 # trivial FD
 t_one.add_fd("A->A")
 t_one.add_fd("AB->A")
 
 # invalid attributes
-t_one.add_fd("E->A")
+t_one.add_fd("G->A")
 
 # empty input
 t_one.add_fd("")
@@ -91,14 +96,13 @@ t_one.print_mvds()
 print(t_one)
 
 # testing closure operator
-attr = "A"
+attr = "CF"
 out = t_one.closure(attr)
 print("closure of " + attr + " = " + str(out))
 t_one.get_keys()
 t_one.print_keys()
 
 # test normal forms
+t_one.get_normal_form()
 
 # test user_define_key
-
-# test boolean conditions

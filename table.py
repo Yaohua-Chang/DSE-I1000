@@ -250,9 +250,10 @@ class Table:
 
         # to compute closure of the seed
         for _ in range(count_fds):
-            for index in range(count_fds):
-                if set(lhs_list[index]).issubset(outputs):
-                    outputs.add(rhs_list[index])
+                for index in range(count_fds):
+                    if set(lhs_list[index]).issubset(outputs):
+                        outputs.add(rhs_list[index])
+                        
         return outputs
 
     ########
