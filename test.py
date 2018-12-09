@@ -9,11 +9,12 @@ db = Database()
 A = Attribute("A", "integer")
 B = Attribute("B", "integer")
 C = Attribute("C", "integer")
-D = Attribute("D", "string")
+D = Attribute("D", "integer")
 E = Attribute("E", "integer")
 F = Attribute("F", "string")
 
 t_one = Table("test1", [A,B,C,D,E,F])
+db.add_table(t_one)
 
 # Adding  boolean conditions
 t_one.add_boolean_conditions("A>10")
@@ -40,10 +41,11 @@ t_one.print_boolean_conditions()
 
 
 # Adding fd's
-t_one.add_fd("AB->C")
-t_one.add_fd("BC->A")
-t_one.add_fd("BC->D")
-t_one.add_fd("CF->B")
+t_one.add_fd("A->B")
+# t_one.add_fd("AB->C")
+# t_one.add_fd("BC->A")
+# t_one.add_fd("BC->D")
+# t_one.add_fd("CF->B")
 
 # adding repeated fd
 t_one.add_fd("A->B")
@@ -106,3 +108,20 @@ t_one.print_keys()
 t_one.get_normal_form()
 
 # test user_define_key
+t_one.master_key = 'AFCED'
+
+# test tuples
+t_one.add_tuple((1,2,3,4,5,"6"))
+
+# violate FDs when input tuples
+t_one.add_tuple((1,10,3,4,5,"6"))
+
+# type error in tuples
+# t_one.add_tuple((1,2,3,4,5,6))
+
+#input error in tuples
+t_one.add_tuple((1,2,3,4))
+
+
+
+print(t_one.tuples)

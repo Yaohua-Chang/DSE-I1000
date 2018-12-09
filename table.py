@@ -22,6 +22,8 @@ class Table:
         self.nf = ""
         self.tuples = {}
         self.parent_database = None  # need reference to Database object for foreign keys
+        self.foreign_keys = []
+        self.foreign_key_tables = []
 
     def __repr__(self):
         out = "Table: " + self.name + "\n\r"
@@ -61,6 +63,12 @@ class Table:
                 print(attr.name , " > " + str(attr.more_than_value), end='\n')
             if attr.less_than_value != None:
                 print(attr.name , " < " + str(attr.less_than_value), end='\n')
+
+    def print_foreign_keys(self):
+        print("The table named: ", self.name, " has foreign keys:")
+        for index, key in enumerate(self.foreign_keys):
+            print("Foreign key " + key + " in table " + self.foreign_key_tables[index].name)
+
 
     ###############
     # CONSTRAINTS #
@@ -314,6 +322,10 @@ class Table:
         self.master_key = k
         return True
 
+    def add_foreign_key(self, foreign_key, foreign_key_table):
+        self.foreign_keys.append(foreign_key)
+        self.foreign_key_tables.append(foreign_key_table)
+
     ################
     # NORMAL FORMS #
     ################
@@ -377,6 +389,10 @@ class Table:
         # need a master key before beginning to add tuples
         if self.master_key == "":
             self.user_define_key()
+        
+        if len(t) !=len(self.attributes_names):
+            print("Invaild tuple input")
+            return False
 
         # pick out the master key from the input tuple
         k = ""
@@ -425,7 +441,7 @@ class Table:
                 for c in table.master_key:
                     if c in self.master_key:
                         # find index of the key attribute in this table
-                        idx = sorted(list(self.attributes_names)).index()
+                        # idx = sorted(list(self.attributes_names)).index()
                         pass
         else:
             print("This table is not part of a database!")

@@ -31,7 +31,7 @@ def create_tables():
     return new_table
 
 
-def create_constraint(table):   
+def create_constraint(table, db):   
     while True:
         input_str = input("Please input Boolean condition:")
         if input_str == "quit":
@@ -68,6 +68,29 @@ def create_constraint(table):
 
         feedback = table.add_mvd(input_str)
         print(feedback)
+
+    while True:
+
+        input_str = input("Please input foreign key and its table(use , as delimiter):")
+        if input_str == "quit":
+            break
+        input_split = input_str.replace(" ","").split(",")
+        if len(input_split) != 2 or input_split[1] == "":
+            print("Invalid input, please input again!")
+            continue
+        if input_split[1] not in db.tables:
+            print("There is no such table!")
+            continue
+        else:
+            foregin_table = db.tables[input_split[1]]
+        
+        result = foregin_table.get_keys().pop()
+        if not input_split[0] in result:
+            print("The key is not the key in the table " + input_split[1] + ".")
+            continue
+
+        table.add_foreign_key(input_str[0], foregin_table)
+        print("Add foreign key successfully")
 
     return table
 
@@ -144,10 +167,15 @@ def fake_data():
     
     new_table1.add_fd("A->B")
     new_table1.add_fd("B->C")
+    new_table1.master_key = "ADEF"
+    new_table1.add_tuple((1,2,3,4,5,'6'))
+    new_table1.add_tuple((11,12,13,14,15,'16'))
 
     new_table2.add_fd("BDE->C")
+    new_table2.master_key = "ABDEF"
 
     new_table3.add_fd("A->B")
+    new_table3.master_key = "ACDEF"
 
     db = Database()
     db.add_table(new_table1)
@@ -157,39 +185,62 @@ def fake_data():
     return db
 
 if __name__ == "__main__":
-    # db = Database()
+    db = Database()
     # Task I.a
     # Define new tables
-    # while True:
-    #     new_table = create_tables()
-    #     db.add_table(new_table)
-    #     is_add_new_table = input("Do you still want to define a new table(yes or no)?")
-    #     if is_add_new_table == "no":
-    #         break
+    while True:
+        new_table = create_tables()
+        db.add_table(new_table)
+        is_add_new_table = input("Do you still want to define a new table(yes or no)?")
+        if is_add_new_table == "no":
+            break
 
     # Task I.b
     # Ask users to input possible constraints for each defined table
-    # for table_name, table in db.tables.items():
-    #     print("Please input constraint for the table [" + table.name + "]. Input 'quit' at any time to stop.")
-    #     table = create_constraint(table)
-    #     table.print_boolean_conditions()
-    #     db.tables[table_name] = table
+    # db = fake_data()
+    for table_name, table in db.tables.items():
+        print("Please input constraint for the table [" + table.name + "]. Input 'quit' at any time to stop.")
+        table = create_constraint(table, db)
+        table.print_foreign_keys()
 
     # Task I.c
     # Evaluate the NF category for the user defined DB
-    # for table_name, table in db.tables.copy().items():
-    #     table = update_normal_form(db, table)
-    #     if table != None:
-    #         db.tables[table_name] = table
+    for table_name, table in db.tables.copy().items():
+        table = update_normal_form(db, table)
+        if table != None:
+            db.tables[table_name] = table
     
     # Task I.d 
     # Ask users to define keys for each table
-    # for table_name, table in db.tables.items():
-    #     user_define_key(table)
+    for table_name, table in db.tables.items():
+        user_define_key(table)
 
     # Task II.a
     # Input new tuples to all tables
-    db = fake_data()
-    
+    # db = fake_data()
+    while True:
+        print("The tables in current db: ", db)
+        input_str = input("Please choose a table in order to input a new tuple into it: ")
+        if input_str == 'quit':
+            break
+        if input_str in db.tables:
+            table = db.tables[input_str]
+            while True:
+                input_tuple = input("Please input a new tuple into the table [" + input_str + "]:")
+                if input_tuple == 'quit':
+                    break
+                table.add_tuple(eval(input_tuple))
+        else:
+            print("Invaild input, please input again!")
 
+    # TODO Task II.b
+    # Delete a tuple based on key value
 
+    # TODO Task II.c
+    # Perform find tuple and group tuple for one table
+
+    # TODO Task II.d
+    # Choose to perform the operators for two tables
+
+    # TODO Task II.e
+    # Delete a table and ensure the across-table integrity
