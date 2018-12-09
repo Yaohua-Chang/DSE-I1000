@@ -233,7 +233,7 @@ if __name__ == "__main__":
         else:
             print("Invaild input, please input again!")
 
-    # TODO Task II.b
+    # Task II.b
     # Delete a tuple based on key value
     while True:
         print("The tables in current db: \n", db)
@@ -248,8 +248,20 @@ if __name__ == "__main__":
             key = input("Please provide the key for the tuple you'd like to delete: ")
             table.remove_tuple(key)
 
-    # TODO Task II.c
-    # Perform find tuple and group tuple for one table
+    # Task II.c
+    # TODO: find tuples based on conditions
+
+    # Group by attribute(s) in specific table
+    while True:
+        print("The tables in current db: \n", db)
+        input_str = input("Would you like to group by any attributes from the tables (y/n)?")
+        if input_str == 'n':
+            break
+        else:
+            table_name = input("Which table would you like to group by in?")
+            table = db[table_name]
+            attr_name = input("Which attribute would you like to group by?")
+            table.group_by(attr_name)
 
     # TODO Task II.d
     # Choose to perform the operators for two tables
