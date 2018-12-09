@@ -40,10 +40,10 @@ t_one.print_boolean_conditions()
 
 
 # Adding fd's
-# t_one.add_fd("AB->C")
-# t_one.add_fd("BC->A")
-# t_one.add_fd("BC->D")
-# t_one.add_fd("CF->B")
+t_one.add_fd("AB->C")
+t_one.add_fd("BC->A")
+t_one.add_fd("BC->D")
+t_one.add_fd("CF->B")
 
 # adding repeated fd
 t_one.add_fd("A->B")

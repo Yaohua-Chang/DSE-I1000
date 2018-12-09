@@ -130,61 +130,66 @@ def user_define_key(table):
     print("Please define keys for the table [" + table.name + "].")
     table.user_define_key()    
 
+def fake_data():
+    A = Attribute("A", "integer")
+    B = Attribute("B", "integer")
+    C = Attribute("C", "integer")
+    D = Attribute("D", "string")
+    E = Attribute("E", "integer")
+    F = Attribute("F", "string")
+
+    new_table1 = Table("test1", [A,B,C,D,E,F])
+    new_table2 = Table("test2", [A,B,C,D,E,F])
+    new_table3 = Table("test3", [A,B,C,D,E,F])
+    
+    new_table1.add_fd("A->B")
+    new_table1.add_fd("B->C")
+
+    new_table2.add_fd("BDE->C")
+
+    new_table3.add_fd("A->B")
+
+    db = Database()
+    db.add_table(new_table1)
+    db.add_table(new_table2)
+    db.add_table(new_table3)
+
+    return db
 
 if __name__ == "__main__":
-    db = Database()
+    # db = Database()
     # Task I.a
     # Define new tables
-    while True:
-        new_table = create_tables()
-        db.add_table(new_table)
-        is_add_new_table = input("Do you still want to define a new table(yes or no)?")
-        if is_add_new_table == "no":
-            break
+    # while True:
+    #     new_table = create_tables()
+    #     db.add_table(new_table)
+    #     is_add_new_table = input("Do you still want to define a new table(yes or no)?")
+    #     if is_add_new_table == "no":
+    #         break
 
     # Task I.b
     # Ask users to input possible constraints for each defined table
-    for table_name, table in db.tables.items():
-        print("Please input constraint for the table [" + table.name + "]. Input 'quit' at any time to stop.")
-        table = create_constraint(table)
-        table.print_boolean_conditions()
-        db.tables[table_name] = table
+    # for table_name, table in db.tables.items():
+    #     print("Please input constraint for the table [" + table.name + "]. Input 'quit' at any time to stop.")
+    #     table = create_constraint(table)
+    #     table.print_boolean_conditions()
+    #     db.tables[table_name] = table
 
     # Task I.c
     # Evaluate the NF category for the user defined DB
-    for table_name, table in db.tables.copy().items():
-        table = update_normal_form(db, table)
-        if table != None:
-            db.tables[table_name] = table
+    # for table_name, table in db.tables.copy().items():
+    #     table = update_normal_form(db, table)
+    #     if table != None:
+    #         db.tables[table_name] = table
     
     # Task I.d 
     # Ask users to define keys for each table
-    for table_name, table in db.tables.items():
-        user_define_key(table)
+    # for table_name, table in db.tables.items():
+    #     user_define_key(table)
 
-
-    # Adding attributes
-    # A = Attribute("A", "integer")
-    # B = Attribute("B", "integer")
-    # C = Attribute("C", "integer")
-    # D = Attribute("D", "string")
-    # E = Attribute("E", "integer")
-    # F = Attribute("F", "string")
-
-    # new_table1 = Table("test1", [A,B,C,D,E,F])
-    # new_table2 = Table("test2", [A,B,C,D,E,F])
-    # new_table3 = Table("test3", [A,B,C,D,E,F])
+    # Task II.a
+    # Input new tuples to all tables
+    db = fake_data()
     
-    # new_table1.add_fd("A->B")
-    # new_table1.add_fd("B->C")
-
-    # new_table2.add_fd("BDE->C")
-
-    # new_table3.add_fd("A->B")
-
-    # db = Database()
-    # db.add_table(new_table1)
-    # db.add_table(new_table2)
-    # db.add_table(new_table3)
 
 
