@@ -22,8 +22,6 @@ class Table:
         self.nf = ""
         self.tuples = {}
         self.parent_database = None  # need reference to Database object for foreign keys
-        self.foreign_keys = []
-        self.foreign_key_tables = []
 
     def __repr__(self):
         out = "Table: " + self.name + "\n\r"
@@ -63,12 +61,6 @@ class Table:
                 print(attr.name , " > " + str(attr.more_than_value), end='\n')
             if attr.less_than_value != None:
                 print(attr.name , " < " + str(attr.less_than_value), end='\n')
-
-    def print_foreign_keys(self):
-        print("The table named: ", self.name, " has foreign keys:")
-        for index, key in enumerate(self.foreign_keys):
-            print("Foreign key " + key + " in table " + self.foreign_key_tables[index].name)
-
 
     ###############
     # CONSTRAINTS #
@@ -322,10 +314,6 @@ class Table:
         self.master_key = k
         return True
 
-    def add_foreign_key(self, foreign_key, foreign_key_table):
-        self.foreign_keys.append(foreign_key)
-        self.foreign_key_tables.append(foreign_key_table)
-
     ################
     # NORMAL FORMS #
     ################
@@ -386,31 +374,27 @@ class Table:
 
     # TODO: foreign key designation
     def add_tuple(self, t):
-        # need a master key before beginning to add tuples
         if self.master_key == "":
             self.user_define_key()
 
-        if len(t) !=len(self.attributes_names):
-            print("Invaild tuple input")
+        if len(t) != len(self.attributes_names):
+            print("Invalid tuple input, must be value for every attribute")
             return False
 
-        # pick out the master key from the input tuple
         k = ""
         for i, c in enumerate(sorted(self.attributes_names)):
             if c in self.master_key:
                 k += str(t[i])
+
         # check FD consistency
         for fd in self.fds:
             lhs, rhs = fd.split("->")
-            # find the position of all the FD's components
             idx_lhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in lhs]
             idx_rhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in rhs]
-
             dict_check = {}
             tmp_tuples = self.tuples.copy()
             tmp_tuples.update({k:t})
             for key in tmp_tuples:
-                # pull out rhs & lhs of FD from each tuple
                 str_tup = ''.join(map(str, tmp_tuples[key]))
                 lhs_value, rhs_value = "", ""
                 for idx in idx_lhs:
@@ -427,22 +411,30 @@ class Table:
                     dict_check[rhs_value] = set()
                     dict_check[rhs_value].add(lhs_value)
 
-        # TODO: check for foreign key
+        # check for foreign key designation
         if self.parent_database:
             for _, table in self.parent_database.tables.items():
-                # pull out the key of that table
                 if table == self:  # ignore the current table reference
                     continue
                 if table.master_key == "":
-                    # add a key (currently table doesn't have one)
                     print("The table " + table.name + " doesn't have a current master key. \n\r")
                     table.user_define_key()
+
                 # does it exist in our current table's key?
+                val_found = False
                 for c in table.master_key:
                     if c in self.master_key:
-                        # find index of the key attribute in this table
-                        # idx = sorted(list(self.attributes_names)).index()
-                        pass
+                        # what's the index in the other table?
+                        other_idx = sorted(list(table.attributes_names)).index(c)
+                        current_idx = sorted(list(self.attributes_names)).index(c)
+                        # iterate over the other table's tuples
+                        for _, tuple in table.tuples.items():
+                            if tuple[other_idx] == t[current_idx]:
+                                val_found = True
+                if not val_found:
+                    print("You can try adding new tuples to the other table " + table.name + ", right now have foreign key error.\n")
+                    print("There is no value " + t[current_idx] + " in that table!")
+                    return False
         else:
             print("This table is not part of a database!")
 
