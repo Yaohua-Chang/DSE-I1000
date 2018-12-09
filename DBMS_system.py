@@ -25,7 +25,8 @@ def create_table():
                 print("Successfully add a new attribute")
 
     db = Database()
-    new_table = Table(db,table_name, attrs)
+    new_table = Table(table_name, attrs)
+    db.add_table(new_table)
     
     print("Please input at least one constraint. Input 'quit' at any time to stop.")
 

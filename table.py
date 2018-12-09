@@ -53,11 +53,13 @@ class Table:
     def print_boolean_conditions(self):
         print("The table named: ", self.name, " has boolean conditions:")
         for attr in self.attributes:
-            if attr.more_than_value != None and attr.less_than_value != None:
-                print(str(attr.more_than_value) + " < " + attr.name , " < " + str(attr.less_than_value), end='\n')
-            elif attr.more_than_value != None:
+            if attr.more_than_or_equal_to_value != None:
+                print(attr.name , " >= " + str(attr.more_than_or_equal_to_value), end='\n')
+            if attr.less_than_or_equal_to_value != None:
+                print(attr.name , " <= " + str(attr.less_than_or_equal_to_value), end='\n')
+            if attr.more_than_value != None:
                 print(attr.name , " > " + str(attr.more_than_value), end='\n')
-            elif attr.less_than_value != None:
+            if attr.less_than_value != None:
                 print(attr.name , " < " + str(attr.less_than_value), end='\n')
 
     ###############
@@ -130,48 +132,107 @@ class Table:
 
         return "Added a new mvd successfully: " + mvd
 
+    def check_input_split(self, input_split):
+        if len(input_split) != 2 or input_split[1] == "":
+            return "This is invaild input."
+        
+        if not input_split[0] in self.attributes_names:
+            return "There is no the attribute in the table"
+        
+        return "";
+        
+    def get_attr_by_name(self, attr_name):
+        for attr in self.attributes:
+            if attr.name == attr_name:
+                return attr
+
     def add_boolean_conditions(self, input_str):
-        if "<" in input_str:
-            input_split = input_str.replace(" ","").split('<')
-            if len(input_split) != 2 or input_split[1] == "":
-                return "This is invaild input."
-            else:
-                if not input_split[0] in self.attributes_names:
-                    return "There is no the attribute in the table"
+        if "<=" in input_str:
+            input_split = input_str.replace(" ","").split('<=')
+            
+            feedback = self.check_input_split(input_split)
+            if feedback != "":
+                return feedback
+           
+            attr = self.get_attr_by_name(input_split[0])  
+            if attr.type != "integer":
+                return "Can't add boolean conditions to attribute whoes type is not integer."
+
+            less_than_or_equal_to_value = int(input_split[1])
+            if attr.more_than_or_equal_to_value != None:
+                if less_than_or_equal_to_value > attr.more_than_or_equal_to_value:
+                    attr.set_less_than_or_equal_to_value(less_than_or_equal_to_value)
+                    return "Add boolean conditions successfully"
                 else:
-                    for attr in self.attributes:
-                        if attr.name == input_split[0]:
-                            less_than_value = int(input_split[1])
-                            if attr.more_than_value != None:
-                                if less_than_value > attr.more_than_value:
-                                    attr.set_less_than_value(less_than_value)
-                                    return "Add boolean conditions successfully"
-                                else:
-                                    return "This is conflicting Boolean conditions"
-                            else:
-                                attr.set_less_than_value(less_than_value)
-                                return "Add boolean conditions successfully"
+                    return "This is conflicting Boolean conditions"
+            else:
+                attr.set_less_than_or_equal_to_value(less_than_or_equal_to_value)
+                return "Add boolean conditions successfully"
+
+        elif ">=" in input_str:
+            input_split = input_str.replace(" ","").split('>=')
+            
+            feedback = self.check_input_split(input_split)
+            if feedback != "":
+                return feedback
+           
+            attr = self.get_attr_by_name(input_split[0])  
+            if attr.type != "integer":
+                return "Can't add boolean conditions to attribute whoes type is not integer."
+
+            more_than_or_equal_to_value = int(input_split[1])
+            if attr.less_than_or_equal_to_value != None:
+                if more_than_or_equal_to_value < attr.less_than_or_equal_to_value:
+                    attr.set_more_than_or_equal_to_value(more_than_or_equal_to_value)
+                    return "Add boolean conditions successfully"
+                else:
+                    return "This is conflicting Boolean conditions"
+            else:
+                attr.set_more_than_or_equal_to_value(more_than_or_equal_to_value)
+                return "Add boolean conditions successfully"
+        elif "<" in input_str:
+            input_split = input_str.replace(" ","").split('<')
+            
+            feedback = self.check_input_split(input_split)
+            if feedback != "":
+                return feedback
+           
+            attr = self.get_attr_by_name(input_split[0])  
+            if attr.type != "integer":
+                return "Can't add boolean conditions to attribute whoes type is not integer."
+
+            less_than_value = int(input_split[1])
+            if attr.more_than_value != None:
+                if less_than_value > attr.more_than_value:
+                    attr.set_less_than_value(less_than_value)
+                    return "Add boolean conditions successfully"
+                else:
+                    return "This is conflicting Boolean conditions"
+            else:
+                attr.set_less_than_value(less_than_value)
+                return "Add boolean conditions successfully"
 
         elif ">" in input_str:
             input_split = input_str.replace(" ","").split('>')
-            if len(input_split)!=2 or input_split[1] == "":
-                return "This is invaild input."
-            else:
-                if not input_split[0] in self.attributes_names:
-                    return "There is no the attribute in the table"
+            
+            feedback = self.check_input_split(input_split)
+            if feedback != "":
+                return feedback
+           
+            attr = self.get_attr_by_name(input_split[0])  
+            if attr.type != "integer":
+                return "Can't add boolean conditions to attribute whoes type is not integer."
+
+            more_than_value = int(input_split[1])
+            if attr.less_than_value != None:
+                if more_than_value < attr.less_than_value:
+                    attr.set_more_than_value(more_than_value)
+                    return "Add boolean conditions successfully"
                 else:
-                    for attr in self.attributes:
-                        if attr.name == input_split[0]:
-                            more_than_value = int(input_split[1])
-                            if attr.less_than_value != None:
-                                if more_than_value < attr.less_than_value:
-                                    attr.set_more_than_value(more_than_value)
-                                    return "Add boolean conditions successfully"
-                                else:
-                                    return "This is conflicting Boolean conditions"
-                            else:
-                                attr.set_more_than_value(more_than_value)
-                                return "Add boolean conditions successfully"
+                    return "This is conflicting Boolean conditions"
+            else:
+                attr.set_more_than_value(more_than_value)
+                return "Add boolean conditions successfully"
 
     ###########
     # CLOSURE #

@@ -6,9 +6,9 @@ from table import Table
 db = Database()
 
 # Adding attributes
-A = Attribute("A", "string")
-B = Attribute("B", "string")
-C = Attribute("C", "string")
+A = Attribute("A", "integer")
+B = Attribute("B", "integer")
+C = Attribute("C", "integer")
 D = Attribute("D", "string")
 E = Attribute("E", "integer")
 
@@ -17,10 +17,12 @@ t_one = Table("test1", [A,B,C,D,E])
 # Adding  boolean conditions
 t_one.add_boolean_conditions("A>10")
 t_one.add_boolean_conditions("A<20")
+t_one.add_boolean_conditions("B>=10")
+t_one.add_boolean_conditions("B<=20")
 
 # Adding conflicting boolean conditions
-t_one.add_boolean_conditions("B>10")
-t_one.add_boolean_conditions("B<5")
+t_one.add_boolean_conditions("C>10")
+t_one.add_boolean_conditions("C<5")
 
 # invalid input
 t_one.add_boolean_conditions("D")
