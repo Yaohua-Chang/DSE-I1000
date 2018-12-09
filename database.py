@@ -7,11 +7,13 @@ class Database:
         self.tables = {}
 
     def __repr__(self):
-
         for table_name in self.tables:
             print(self.tables[table_name])
             print("\n\r")
         return None
+
+    def __str__(self):
+        return " ".join([table_name for table_name in self.tables])
 
     def add_table(self, table):
         decision = 'y'

@@ -253,7 +253,7 @@ class Table:
                 for index in range(count_fds):
                     if set(lhs_list[index]).issubset(outputs):
                         outputs.add(rhs_list[index])
-                        
+
         return outputs
 
     ########
@@ -307,7 +307,7 @@ class Table:
             return True
         valid_key = k in self.keys
         while not valid_key:
-            print("Unfortunately that's not a viable key. Here are you options:\n" + str(table.keys))
+            print("Unfortunately that's not a viable key. Here are you options:\n" + str(self.keys))
             k = input("Try a different key: ")
             valid_key = k in self.keys
         print("Great selection! " + k + " is a viable key")
