@@ -31,7 +31,7 @@ def create_tables():
     return new_table
 
 
-def create_constraint(table, db):   
+def create_constraint(table, db):
     while True:
         input_str = input("Please input Boolean condition:")
         if input_str == "quit":
@@ -83,7 +83,7 @@ def create_constraint(table, db):
             continue
         else:
             foregin_table = db.tables[input_split[1]]
-        
+
         result = foregin_table.get_keys().pop()
         if not input_split[0] in result:
             print("The key is not the key in the table " + input_split[1] + ".")
@@ -134,7 +134,7 @@ def update_normal_form(db, table):
                     if len(table.fds) == 0:
                         print("The table has no FD left! Please start again")
                         break
-                            
+
                     else:
                         table.get_normal_form()
                         again = input("The table now has normal form " + table.nf + " would you like to continue (y/n)?")
@@ -151,7 +151,7 @@ def update_normal_form(db, table):
 def user_define_key(table):
     table.get_keys()
     print("Please define keys for the table [" + table.name + "].")
-    table.user_define_key()    
+    table.user_define_key()
 
 def fake_data():
     A = Attribute("A", "integer")
@@ -164,7 +164,7 @@ def fake_data():
     new_table1 = Table("test1", [A,B,C,D,E,F])
     new_table2 = Table("test2", [A,B,C,D,E,F])
     new_table3 = Table("test3", [A,B,C,D,E,F])
-    
+
     new_table1.add_fd("A->B")
     new_table1.add_fd("B->C")
     new_table1.master_key = "ADEF"
@@ -209,8 +209,8 @@ if __name__ == "__main__":
         table = update_normal_form(db, table)
         if table != None:
             db.tables[table_name] = table
-    
-    # Task I.d 
+
+    # Task I.d
     # Ask users to define keys for each table
     for table_name, table in db.tables.items():
         user_define_key(table)
@@ -219,8 +219,8 @@ if __name__ == "__main__":
     # Input new tuples to all tables
     # db = fake_data()
     while True:
-        print("The tables in current db: ", db)
-        input_str = input("Please choose a table in order to input a new tuple into it: ")
+        print("The tables in current db: \n", db)
+        input_str = input("Please choose a table in order to input a new tuple into it(or quit to terminate): ")
         if input_str == 'quit':
             break
         if input_str in db.tables:
@@ -235,6 +235,18 @@ if __name__ == "__main__":
 
     # TODO Task II.b
     # Delete a tuple based on key value
+    while True:
+        print("The tables in current db: \n", db)
+        input_str = input("Would you like to delete a tuple from any table? (y/n)")
+        if input_str == 'n':
+            break
+        else:
+            table_name = input("Which table would you like to delete from?")
+            table = db[table_name]
+            print("This the table you will be deleting from: \n", table)
+            print("Which has the key: ", key)
+            key = input("Please provide the key for the tuple you'd like to delete: ")
+            table.remove_tuple(key)
 
     # TODO Task II.c
     # Perform find tuple and group tuple for one table

@@ -143,12 +143,12 @@ class Table:
     def check_input_split(self, input_split):
         if len(input_split) != 2 or input_split[1] == "":
             return "This is invaild input."
-        
+
         if not input_split[0] in self.attributes_names:
             return "There is no the attribute in the table"
-        
+
         return "";
-        
+
     def get_attr_by_name(self, attr_name):
         for attr in self.attributes:
             if attr.name == attr_name:
@@ -157,12 +157,12 @@ class Table:
     def add_boolean_conditions(self, input_str):
         if "<=" in input_str:
             input_split = input_str.replace(" ","").split('<=')
-            
+
             feedback = self.check_input_split(input_split)
             if feedback != "":
                 return feedback
-           
-            attr = self.get_attr_by_name(input_split[0])  
+
+            attr = self.get_attr_by_name(input_split[0])
             if attr.type != "integer":
                 return "Can't add boolean conditions to attribute whoes type is not integer."
 
@@ -179,12 +179,12 @@ class Table:
 
         elif ">=" in input_str:
             input_split = input_str.replace(" ","").split('>=')
-            
+
             feedback = self.check_input_split(input_split)
             if feedback != "":
                 return feedback
-           
-            attr = self.get_attr_by_name(input_split[0])  
+
+            attr = self.get_attr_by_name(input_split[0])
             if attr.type != "integer":
                 return "Can't add boolean conditions to attribute whoes type is not integer."
 
@@ -200,12 +200,12 @@ class Table:
                 return "Add boolean conditions successfully"
         elif "<" in input_str:
             input_split = input_str.replace(" ","").split('<')
-            
+
             feedback = self.check_input_split(input_split)
             if feedback != "":
                 return feedback
-           
-            attr = self.get_attr_by_name(input_split[0])  
+
+            attr = self.get_attr_by_name(input_split[0])
             if attr.type != "integer":
                 return "Can't add boolean conditions to attribute whoes type is not integer."
 
@@ -222,12 +222,12 @@ class Table:
 
         elif ">" in input_str:
             input_split = input_str.replace(" ","").split('>')
-            
+
             feedback = self.check_input_split(input_split)
             if feedback != "":
                 return feedback
-           
-            attr = self.get_attr_by_name(input_split[0])  
+
+            attr = self.get_attr_by_name(input_split[0])
             if attr.type != "integer":
                 return "Can't add boolean conditions to attribute whoes type is not integer."
 
@@ -389,7 +389,7 @@ class Table:
         # need a master key before beginning to add tuples
         if self.master_key == "":
             self.user_define_key()
-        
+
         if len(t) !=len(self.attributes_names):
             print("Invaild tuple input")
             return False
@@ -453,6 +453,12 @@ class Table:
     def get_tuple(self, key):
         try:
             return self.tuples[key]
+        except KeyError:
+            print("There is no tuple with key: " + key)
+
+    def remove_tuple(self, key):
+        try:
+            del self.tuples[key]
         except KeyError:
             print("There is no tuple with key: " + key)
 
