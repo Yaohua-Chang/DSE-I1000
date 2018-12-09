@@ -381,6 +381,31 @@ class Table:
             print("Invalid tuple input, must be value for every attribute")
             return False
 
+        # type check
+        for i, el in enumerate(t):
+            attr_types = [a.type for a in sorted(self.attributes)]
+            if attr_types[i] == "integer":
+                valid_tuple = isinstance(el, int)
+            else:
+                valid_tuple = isinstance(el, str)
+            if not valid_tuple:
+                print("The type check failed on: " + str(el) + " at position " + str(i))
+                return False
+
+        # condition check
+        for i, attr in enumerate(self.attributes):
+            if attr.less_than_value:
+                valid_tuple = t[i] < attr.less_than_value
+            elif attr.more_than_value:
+                valid_tuple = t[i] > attr.less_than_value
+            elif attr.less_than_or_equal_to_value:
+                valid_tuple = t[i] <= attr.less_than_or_equal_to_value
+            elif attr.more_than_or_equal_to_value:
+                valid_tuple = t[i] >= attr.more_than_or_equal_to_value
+            if not valid_tuple:
+                print("The conditional check failed on: " + str(t[i]) + " at position " + str(i))
+                return False
+
         k = ""
         for i, c in enumerate(sorted(self.attributes_names)):
             if c in self.master_key:
