@@ -83,12 +83,17 @@ def update_normal_form(table):
 
     print("Currently this table has normal form: " + table.nf)
 
-    if table.nf != "3NF" or table.nf != "BCNF":
+    if not (table.nf == "3NF" or table.nf == "BCNF"):
         print("You can either delete this table or update its FD's.")
-        decision = input("Either type \'del\' for deletion or \'u\' to update:")
+        decision = input("Either type \'del\' for deletion of the table or \'u\' to update:")
 
         if decision == 'del':
-            del table
+            input_str = input("Are you sure delete the table "+ table.name +"?(yea or no)")
+            if input_str == "yes":
+                del table
+                print("delete the tabel " + table.name + " successfuly")
+            else:
+                update_normal_form(table)
         elif decision == 'u':
             done = False
             while not done:
@@ -140,6 +145,6 @@ if __name__ == "__main__":
     db = Database()
     db.add_table(new_table)
 
-    new_table.add_fd("A->B")
+    # new_table.add_fd("A->B")
 
     update_normal_form(new_table)

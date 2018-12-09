@@ -46,7 +46,7 @@ t_one.print_boolean_conditions()
 # t_one.add_fd("CF->B")
 
 # adding repeated fd
-#t_one.add_fd("A->B")
+t_one.add_fd("A->B")
 
 # trivial FD
 t_one.add_fd("A->A")
