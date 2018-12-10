@@ -474,7 +474,7 @@ class Table:
                                 val_found = True
                 if not val_found:
                     print("You can try adding new tuples to the other table " + table.name + ", right now have foreign key error.\n")
-                    print("There is no value " + t[current_idx] + " in that table!")
+                    print("There is no value " + str(t[current_idx]) + " in that table!")
                     return False
         else:
             print("This table is not part of a database! No foreign key to check")
@@ -533,7 +533,7 @@ class Table:
         # pick out index of attributes being conditioned on
         idx_attr = self.get_attr_idx(attr_name)
         attr_dict = {}
-        if len(attr_name) != len(values) or len(attr_name) != len(condition):
+        if len(attr_name) != len(values) or len(attr_name) != len(conditions):
             print("Must have same number of attributes, values, and conditions!")
         for i, v in enumerate(values):
             statement = conditions[i] + " " + str(v)
