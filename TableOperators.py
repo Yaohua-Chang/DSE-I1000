@@ -30,7 +30,7 @@ def table_to_pd(table):
 def union(table1, table2):
     t1 = table_to_pd(table1)
     t2 = table_to_pd(table2)
-    return pd.concat([t1, t2], ignore_index=True).dropna()
+    return pd.concat([t1, t2], ignore_index=True).dropna().drop_duplicates()
 
 
 def intersection(table1, table2):
