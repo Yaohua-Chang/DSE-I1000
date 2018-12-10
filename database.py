@@ -12,6 +12,12 @@ class Database:
             print("\n\r")
         return None
 
+    def __str__(self):
+        out = ""
+        for _, table in self.tables.items():
+            out += str(table)
+        return out
+
     def add_table(self, table):
         decision = 'y'
         # check if table already in DB and warn user
@@ -33,17 +39,19 @@ class Database:
             print("There is no table with the name " + name)
             return False
 
-    # TODO: write out the database (and all tables) to ASCII text doc
     def write_database(self, path = ""):
-        pass
+        f = open("database.txt", "w+")
+        f.write(str(self))
+        f.close()
 
     # TODO: read-in database from an ASCII text doc
     def read_database(self, path):
         pass
 
-    # TODO: write out specific table to ASCII text doc
-    def write_table(self, table_name, path = ""):
-        pass
+    def write_table(self, table, path = ""):
+        f = open("table_" + table.name + ".txt", "w+")
+        f.write(str(table))
+        f.close()
 
     # TODO: read-in specific table to ASCII text doc (this might be difficult)
     def read_table(self, path):

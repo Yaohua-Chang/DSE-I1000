@@ -35,6 +35,18 @@ class Table:
                 out += str(c) + " | "
         return out
 
+    def __str__(self):
+        out = "Table: " + self.name + "\n\r"
+        for name in sorted(self.attributes_names):
+            out += " | " + name
+        out += " |\n\r" + "-" * 5 * len(self.attributes)
+        for k in self.tuples:
+            out += "\n\r | "
+            t = self.tuples[k]
+            for c in t:
+                out += str(c) + " | "
+        return out
+
     #########
     # PRINT #
     #########
@@ -461,7 +473,7 @@ class Table:
                     print("There is no value " + t[current_idx] + " in that table!")
                     return False
         else:
-            print("This table is not part of a database!")
+            print("This table is not part of a database! No foreign key to check")
 
         # add tuple
         self.tuples[k] = t
