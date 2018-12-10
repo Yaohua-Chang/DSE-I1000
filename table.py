@@ -468,7 +468,7 @@ class Table:
                 val_found = False
                 foreign_keys_exist = False
                 current_idx = None
-                for c in table.master_key:
+                for c in table.attributes_names:
                     if c in self.master_key:
                         foreign_keys_exist = True
                         current_idx = sorted(list(self.attributes_names)).index(c)
