@@ -302,7 +302,11 @@ class Table:
     def user_define_key(self):
         k = input("What key would you like to use? (type \'rand\' to have it selected for you): ")
         if k == "rand":
-            self.master_key = random.sample(self.keys,1)[0]
+            if len(self.keys) == 0:
+                print("There is no key in the table [" + self.name + "].")
+                return False
+            else:
+                self.master_key = random.sample(self.keys,1)[0]
             print("You have been given the key: " + self.master_key)
             return True
         valid_key = k in self.keys

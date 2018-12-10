@@ -165,14 +165,14 @@ def fake_data():
     new_table2 = Table("test2", [A,B,C,D,E,F])
     new_table3 = Table("test3", [A,B,C,D,E,F])
 
-    new_table1.add_fd("A->B")
-    new_table1.add_fd("B->C")
-    new_table1.master_key = "ADEF"
-    new_table1.add_tuple((1,2,3,4,5,'6'))
-    new_table1.add_tuple((11,12,13,14,15,'16'))
+    # new_table1.add_fd("A->B")
+    # new_table1.add_fd("B->C")
+    # new_table1.master_key = "ADEF"
+    # new_table1.add_tuple((1,2,3,4,5,'6'))
+    # new_table1.add_tuple((11,12,13,14,15,'16'))
 
-    new_table2.add_fd("BDE->C")
-    new_table2.master_key = "ABDEF"
+    # new_table2.add_fd("BDE->C")
+    # new_table2.master_key = "ABDEF"
 
     new_table3.add_fd("A->B")
     new_table3.master_key = "ACDEF"
@@ -188,30 +188,30 @@ if __name__ == "__main__":
     db = Database()
     # Task I.a
     # Define new tables
-    while True:
-        new_table = create_tables()
-        db.add_table(new_table)
-        is_add_new_table = input("Do you still want to define a new table(yes or no)?")
-        if is_add_new_table == "no":
-            break
+    # while True:
+    #     new_table = create_tables()
+    #     db.add_table(new_table)
+    #     is_add_new_table = input("Do you still want to define a new table(yes or no)?")
+    #     if is_add_new_table == "no":
+    #         break
 
     # Task I.b
     # Ask users to input possible constraints for each defined table
     # db = fake_data()
-    for table_name, table in db.tables.items():
-        print("Please input constraint for the table [" + table.name + "]. Input 'quit' at any time to stop.")
-        table = create_constraint(table, db)
-        table.print_foreign_keys()
+    # for table_name, table in db.tables.items():
+    #     print("Please input constraint for the table [" + table.name + "]. Input 'quit' at any time to stop.")
+    #     table = create_constraint(table, db)
 
     # Task I.c
     # Evaluate the NF category for the user defined DB
-    for table_name, table in db.tables.copy().items():
-        table = update_normal_form(db, table)
-        if table != None:
-            db.tables[table_name] = table
+    # for table_name, table in db.tables.copy().items():
+    #     table = update_normal_form(db, table)
+    #     if table != None:
+    #         db.tables[table_name] = table
 
     # Task I.d
     # Ask users to define keys for each table
+    db = fake_data()
     for table_name, table in db.tables.items():
         user_define_key(table)
 
@@ -242,9 +242,9 @@ if __name__ == "__main__":
             break
         else:
             table_name = input("Which table would you like to delete from?")
-            table = db[table_name]
+            table = db.tables[table_name]
             print("This the table you will be deleting from: \n", table)
-            print("Which has the key: ", key)
+            print("Which has the key: ", table.keys)
             key = input("Please provide the key for the tuple you'd like to delete: ")
             table.remove_tuple(key)
 
@@ -259,7 +259,7 @@ if __name__ == "__main__":
             break
         else:
             table_name = input("Which table would you like to group by in?")
-            table = db[table_name]
+            table = db.tables[table_name]
             attr_name = input("Which attribute would you like to group by?")
             table.group_by(attr_name)
 
