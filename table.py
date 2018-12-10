@@ -390,6 +390,7 @@ class Table:
     # TUPLES #
     ##########
 
+
     def add_tuple(self, t):
         if self.master_key == "":
             self.user_define_key()
@@ -428,11 +429,18 @@ class Table:
             if c in self.master_key:
                 k += str(t[i])
 
+        if k in self.tuples:
+            print("There is already a tuple for that key: " + str(self.tuples[k]))
+            delete_it = input("Would you like to overwrite it (y/n)?")
+            if delete_it == 'n':
+                return False
+
         # check FD consistency
         for fd in self.fds:
-            lhs, rhs = fd.split("->")
-            idx_lhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in lhs]
-            idx_rhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in rhs]
+            lhs_str, rhs_str = fd.split("->")
+            lengths = [len(str(el)) for el in t]
+            idx_lhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in lhs_str]
+            idx_rhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in rhs_str]
             dict_check = {}
             tmp_tuples = self.tuples.copy()
             tmp_tuples.update({k:t})
@@ -440,18 +448,15 @@ class Table:
                 str_tup = ''.join(map(str, tmp_tuples[key]))
                 lhs_value, rhs_value = "", ""
                 for idx in idx_lhs:
-                    lhs_value += str_tup[idx]
+                    lhs_value += str_tup[idx:idx+lengths[idx]]
                 for idx in idx_rhs:
-                    rhs_value += str_tup[idx]
-                if rhs_value in dict_check:
-                    dict_check[rhs_value].add(lhs_value)
-                    if len(dict_check[rhs_value]) > 1:
-                        # RHS points at two distinct LHS values; therefore violates prop. of FD
-                        print("This breaks the consistency implied by the FD: " + fd)
-                        return False
-                else:
-                    dict_check[rhs_value] = set()
-                    dict_check[rhs_value].add(lhs_value)
+                    rhs_value += str_tup[idx:idx+lengths[idx]]
+                if lhs_value not in dict_check:
+                    dict_check[lhs_value] = set()
+                dict_check[lhs_value].add(rhs_value)
+                if len(dict_check[lhs_value]) > 1:
+                    print("That tuple violates FD: " + lhs_str + "->" + rhs_str)
+                    return False
 
         # check for foreign key designation
         if self.parent_database:
@@ -586,4 +591,4 @@ class Table:
     #                 attr_dict[statement].add(tuple_k)
     #         else:
     #             print("Incorrect condition, must be one of: <, >, <>, or == ")
-    #     return attr_dict    
+    #     return attr_dict
