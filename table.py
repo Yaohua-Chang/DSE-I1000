@@ -550,17 +550,40 @@ class Table:
             for tuple_k, tuple_v in self.tuples.items():
                 val_to_check = tuple_v[i]
                 if conditions[i] == '>':
-                    if val_to_check > values[i]:
+                    if val_to_check > int(values[i]):
                         attr_dict[statement].add(tuple_k)
                 elif conditions[i] == '<':
-                    if val_to_check < values[i]:
+                    if val_to_check < int(values[i]):
                         attr_dict[statement].add(tuple_k)
                 elif conditions[i] == '<>':
-                    if val_to_check != values[i]:
+                    if val_to_check != int(values[i]):
                         attr_dict[statement].add(tuple_k)
                 elif conditions[i] == '==':
-                    if val_to_check == values[i]:
+                    if val_to_check == int(values[i]):
                         attr_dict[statement].add(tuple_k)
                 else:
                     print("Incorrect condition, must be one of: <, >, <>, or == ")
         return attr_dict
+
+    # def get_tuple_conditions(self, attr_name, values, conditions):
+    #     statement = conditions + " " + values
+    #     attr_dict = {}
+    #     attr_dict[statement] = set()  # store the keys satisfying the conditions
+    #     # iterate over tuples, picking out attribute & checking
+    #     for tuple_k, tuple_v in self.tuples.items():
+    #         val_to_check = tuple_v[self.get_attr_idx(attr_name)]
+    #         if conditions == '>':
+    #             if val_to_check > int(values):
+    #                 attr_dict[statement].add(tuple_k)
+    #         elif conditions == '<':
+    #             if val_to_check < int(values):
+    #                 attr_dict[statement].add(tuple_k)
+    #         elif conditions == '<>':
+    #             if val_to_check != int(values):
+    #                 attr_dict[statement].add(tuple_k)
+    #         elif conditions == '==':
+    #             if val_to_check == int(values):
+    #                 attr_dict[statement].add(tuple_k)
+    #         else:
+    #             print("Incorrect condition, must be one of: <, >, <>, or == ")
+    #     return attr_dict    
