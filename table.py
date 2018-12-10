@@ -22,6 +22,7 @@ class Table:
         self.nf = ""
         self.tuples = {}
         self.parent_database = None  # need reference to Database object for foreign keys
+        self.is_empty = True
 
     def __repr__(self):
         out = "Table: " + self.name + "\n\r"
@@ -457,6 +458,8 @@ class Table:
             for _, table in self.parent_database.tables.items():
                 if table == self:  # ignore the current table reference
                     continue
+                if table.is_empty:  # ignore table w/o tuples
+                    continue
                 if table.master_key == "":
                     print("The table " + table.name + " doesn't have a current master key. \n\r")
                     table.user_define_key()
@@ -480,6 +483,7 @@ class Table:
             print("This table is not part of a database! No foreign key to check")
 
         # add tuple
+        self.is_empty = False
         self.tuples[k] = t
         return True
 
