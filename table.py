@@ -474,7 +474,7 @@ class Table:
                                 val_found = True
                 if not val_found:
                     print("You can try adding new tuples to the other table " + table.name + ", right now have foreign key error.\n")
-                    print("There is no value " + t[current_idx] + " in that table!")
+                    print("There is no value " + str(t[current_idx]) + " in that table!")
                     return False
         else:
             print("This table is not part of a database! No foreign key to check")
