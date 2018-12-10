@@ -466,9 +466,11 @@ class Table:
 
                 # does it exist in our current table's key?
                 val_found = False
+                foreign_keys_exist = False
                 current_idx = None
                 for c in table.master_key:
                     if c in self.master_key:
+                        foreign_keys_exist = True
                         current_idx = sorted(list(self.attributes_names)).index(c)
                         # what's the index in the other table?
                         other_idx = sorted(list(table.attributes_names)).index(c)
@@ -476,7 +478,7 @@ class Table:
                         for _, tuple in table.tuples.items():
                             if tuple[other_idx] == t[current_idx]:
                                 val_found = True
-                if not val_found:
+                if not val_found and foreign_keys_exist:
                     print("You can try adding new tuples to the other table " + table.name + ", right now have foreign key error.\n")
                     if current_idx:
                         print("There is no value " + str(t[current_idx]) + " in that table!")
