@@ -413,7 +413,7 @@ class Table:
             if attr.less_than_value:
                 valid_tuple = t[i] < attr.less_than_value
             elif attr.more_than_value:
-                valid_tuple = t[i] > attr.less_than_value
+                valid_tuple = t[i] > attr.more_than_value
             elif attr.less_than_or_equal_to_value:
                 valid_tuple = t[i] <= attr.less_than_or_equal_to_value
             elif attr.more_than_or_equal_to_value:
