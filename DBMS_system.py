@@ -43,7 +43,11 @@ def create_constraint(table, db):
 
         input_str = input("Please input FD:")
         if input_str == "quit":
-            break
+            if len(table.fds) == 0:
+                print("Please input at least one FD for the table.")
+                continue
+            else:
+                break
         feedback = table.add_fd(input_str)
         print(feedback)
 
@@ -161,31 +165,31 @@ def fake_data():
     E = Attribute("E", "integer")
     F = Attribute("F", "string")
 
-    new_table1 = Table("test1", [A,B,C,D,E,F])
-    new_table2 = Table("test2", [A,B,C,D,E,F])
-    new_table3 = Table("test3", [A,B,C,D,E,F])
+    new_table1 = Table("test1", [A,B,C])
+    new_table2 = Table("test2", [C,D,E])
+    # new_table3 = Table("test3", [A,B,C,D,E,F])
 
-    # new_table1.add_fd("A->B")
-    # new_table1.add_fd("B->C")
+    new_table1.add_fd("A->B")
+    new_table1.add_fd("B->C")
     # new_table1.master_key = "ADEF"
-    # new_table1.add_tuple((1,2,3,4,5,'6'))
+    # new_table1.add_tuple((1,2,3,'4',5,'6'))
     # new_table1.add_tuple((11,12,13,14,15,'16'))
 
-    # new_table2.add_fd("BDE->C")
+    new_table2.add_fd("DE->C")
     # new_table2.master_key = "ABDEF"
 
-    new_table3.add_fd("A->B")
-    new_table3.master_key = "ACDEF"
+    # new_table3.add_fd("A->B")
+    # new_table3.master_key = "ACDEF"
 
     db = Database()
     db.add_table(new_table1)
     db.add_table(new_table2)
-    db.add_table(new_table3)
+    # db.add_table(new_table3)
 
     return db
 
 if __name__ == "__main__":
-    db = Database()
+    # db = Database()
     # Task I.a
     # Define new tables
     # while True:
@@ -219,7 +223,9 @@ if __name__ == "__main__":
     # Input new tuples to all tables
     # db = fake_data()
     while True:
-        print("The tables in current db: \n", db)
+        print("The tables in current db: \n")
+        for _, table in  db.tables.items():
+            print(table,end='\n')
         input_str = input("Please choose a table in order to input a new tuple into it(or quit to terminate): ")
         if input_str == 'quit':
             break
@@ -229,7 +235,13 @@ if __name__ == "__main__":
                 input_tuple = input("Please input a new tuple into the table [" + input_str + "]:")
                 if input_tuple == 'quit':
                     break
-                table.add_tuple(eval(input_tuple))
+                try:
+                    new_tuple = eval(input_tuple)
+                except:
+                    print("Invaild input, please input again!")
+                
+                table.add_tuple = new_tuple
+
         else:
             print("Invaild input, please input again!")
 
