@@ -552,7 +552,10 @@ class Table:
             statement = conditions[i] + " " + str(v)
             attr_dict[statement] = set()
             for tuple_k, tuple_v in self.tuples.items():
-                val_to_check = tuple_v[idx_attr]
+                if isinstance(idx_attr, int):
+                    val_to_check = tuple_v[idx_attr]
+                else:
+                    val_to_check = tuple_v[idx_attr[i]]
                 if conditions[i] == '>':
                     if val_to_check > int(values[i]):
                         attr_dict[statement].add(tuple_k)
