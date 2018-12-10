@@ -546,14 +546,15 @@ class Table:
         # pick out index of attributes being conditioned on
         idx_attr = self.get_attr_idx(attr_name)
         attr_dict = {}
-        if len(attr_name) != len(values) or len(attr_name) != len(conditions):
-            print("Must have same number of attributes, values, and conditions!")
+        if not isinstance(values, list):
+            print("The values must be passed in as a list!")
+            return False
         for i, v in enumerate(values):
             statement = conditions[i] + " " + str(v)
             attr_dict[statement] = set()  # store the keys satisfying the conditions
             # iterate over tuples, picking out attribute & checking
             for tuple_k, tuple_v in self.tuples.items():
-                val_to_check = tuple_v[i]
+                val_to_check = tuple_v[idx_attr]
                 if conditions[i] == '>':
                     if val_to_check > int(values[i]):
                         attr_dict[statement].add(tuple_k)
