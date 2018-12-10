@@ -171,12 +171,12 @@ def fake_data():
 
     new_table1.add_fd("A->B")
     new_table1.add_fd("B->C")
-    # new_table1.master_key = "ADEF"
+    new_table1.master_key = "A"
     # new_table1.add_tuple((1,2,3,'4',5,'6'))
     # new_table1.add_tuple((11,12,13,14,15,'16'))
 
     new_table2.add_fd("DE->C")
-    # new_table2.master_key = "ABDEF"
+    new_table2.master_key = "DE"
 
     # new_table3.add_fd("A->B")
     # new_table3.master_key = "ACDEF"
@@ -221,27 +221,30 @@ if __name__ == "__main__":
 
     # Task II.a
     # Input new tuples to all tables
-    # db = fake_data()
+    db = fake_data()
     while True:
         print("The tables in current db: \n")
-        for _, table in  db.tables.items():
-            print(table,end='\n')
+        print(db)
         input_str = input("Please choose a table in order to input a new tuple into it(or quit to terminate): ")
         if input_str == 'quit':
             break
         if input_str in db.tables:
-            table = db.tables[input_str]
+            table_to_add = db.tables[input_str]
             while True:
-                input_tuple = input("Please input a new tuple into the table [" + input_str + "]:")
-                if input_tuple == 'quit':
+                in_tuple_str = input("Input a new tuple into " + input_str + " using \',\' as delimiter(or quit):")
+                if in_tuple_str == "quit":
                     break
+                in_tuple_as_list = list(in_tuple_str.split(','))
+                type_list = [a.type for a in table_to_add.attributes]
                 try:
-                    new_tuple = eval(input_tuple)
+                    for i, el in enumerate(in_tuple_as_list):
+                        if type_list[i] == "integer":
+                            in_tuple_as_list[i] = int(el)
                 except:
-                    print("Invaild input, please input again!")
-                
-                table.add_tuple = new_tuple
-
+                    print("Invalid tuple, please input again!")
+                    continue
+                # handle case of integer
+                table_to_add.add_tuple(tuple(in_tuple_as_list))
         else:
             print("Invaild input, please input again!")
 
