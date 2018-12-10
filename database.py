@@ -33,6 +33,15 @@ class Database:
 
     def delete_table(self, name):
         if name in self.tables:
+            # check for cross-table dependency
+            table_attributes = set(self.tables[name].attributes_names)
+            for _, table in self.tables.items():
+                if table == self.tables[name]:  # ignore table being deleted
+                    continue
+                if len(table_attributes.intersection(set(table.attributes_names))) > 0:
+                    # table being deleted has attributes in the other table(s)
+                    print("You cannot delete this table because its attributes are shared by " + table.name)
+                    return False
             del self.tables[name]
             return True
         else:

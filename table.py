@@ -33,6 +33,7 @@ class Table:
             t = self.tuples[k]
             for c in t:
                 out += str(c) + " | "
+        out += "\n\r"
         return out
 
     def __str__(self):
@@ -45,6 +46,7 @@ class Table:
             t = self.tuples[k]
             for c in t:
                 out += str(c) + " | "
+        out += "\n\r"
         return out
 
     #########
@@ -312,13 +314,12 @@ class Table:
         print("All keys for this table are : ", str(self.keys))
 
     def user_define_key(self):
+        if len(self.keys) == 0:
+            print("There is no key in the table [" + self.name + "].")
+            return False
         k = input("What key would you like to use? (type \'rand\' to have it selected for you): ")
         if k == "rand":
-            if len(self.keys) == 0:
-                print("There is no key in the table [" + self.name + "].")
-                return False
-            else:
-                self.master_key = random.sample(self.keys,1)[0]
+            self.master_key = random.sample(self.keys,1)[0]
             print("You have been given the key: " + self.master_key)
             return True
         valid_key = k in self.keys
