@@ -111,13 +111,16 @@ t_one.get_normal_form()
 t_one.master_key = 'AFCED'
 
 # test tuples
-t_one.add_tuple((1,2,3,4,5,6))
+t_one.add_tuple((1,2,15,4,5,"6"))
+
+# violate boolean condition in tuples
+t_one.add_tuple((1,2,3,4,5,"6"))
 
 # violate FDs when input tuples
-t_one.add_tuple((1,10,3,4,5,6))
+t_one.add_tuple((1,10,15,4,5,"6"))
 
 # type error in tuples
-# t_one.add_tuple((1,2,3,4,5,6))
+t_one.add_tuple((1,2,15,4,5,6))
 
 #input error in tuples
 t_one.add_tuple((1,2,3,4))
