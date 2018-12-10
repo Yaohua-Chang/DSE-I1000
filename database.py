@@ -12,9 +12,6 @@ class Database:
             print("\n\r")
         return None
 
-    def __str__(self):
-        return " ".join([table_name for table_name in self.tables])
-
     def add_table(self, table):
         decision = 'y'
         # check if table already in DB and warn user
