@@ -348,7 +348,7 @@ class Table:
         return False
 
     def determine_2NF(self):
-        non_prime_attrs = self.attributes_names
+        non_prime_attrs = self.attributes_names.copy()
         for key in self.keys:
             non_prime_attrs -= set(key)
 
@@ -389,7 +389,6 @@ class Table:
     # TUPLES #
     ##########
 
-    # TODO: foreign key designation
     def add_tuple(self, t):
         if self.master_key == "":
             self.user_define_key()
