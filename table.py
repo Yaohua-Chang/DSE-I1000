@@ -467,8 +467,8 @@ class Table:
                 # does it exist in our current table's key?
                 val_found = False
                 for c in table.master_key:
-                    current_idx = sorted(list(self.attributes_names)).index(c)
                     if c in self.master_key:
+                        current_idx = sorted(list(self.attributes_names)).index(c)
                         # what's the index in the other table?
                         other_idx = sorted(list(table.attributes_names)).index(c)
                         # iterate over the other table's tuples
