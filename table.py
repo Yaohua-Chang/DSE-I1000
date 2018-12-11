@@ -503,6 +503,38 @@ class Table:
             print("There is no tuple with key: " + key)
 
     def remove_tuple(self, key):
+        if not isinstance(key, str):
+            print("The key must be a string")
+            return False
+        t = self.tuples[key]
+        # check for foreign key designation
+        if self.parent_database:
+            for _, table in self.parent_database.tables.items():
+                if table == self:  # ignore the current table reference
+                    continue
+                if table.is_empty:  # ignore table w/o tuples
+                    continue
+                if table.master_key == "":
+                    print("The table " + table.name + " doesn't have a current master key. \n\r")
+                    table.user_define_key()
+
+                val_found = False
+                foreign_keys_exist = False
+                current_idx = None
+                for c in table.attributes_names:
+                    if c in self.master_key:
+                        foreign_keys_exist = True
+                        current_idx = sorted(list(self.attributes_names)).index(c)
+                        # what's the index in the other table?
+                        other_idx = sorted(list(table.attributes_names)).index(c)
+                        # iterate over the other table's tuples
+                        for _, tuple in table.tuples.items():
+                            if tuple[other_idx] == t[current_idx]:
+                                val_found = True
+                                print("Cannot remove that tuple, foreign key error!")
+                                return False
+        else:
+            print("This table is not part of a database! No foreign key to check")
         try:
             del self.tuples[key]
         except KeyError:
