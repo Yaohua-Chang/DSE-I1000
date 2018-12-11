@@ -73,28 +73,28 @@ def create_constraint(table, db):
         feedback = table.add_mvd(input_str)
         print(feedback)
 
-    while True:
+#     Remove this/ Not neccessary
+#     while True:
+#         input_str = input("Please input foreign key and its table(use , as delimiter):")
+#         if input_str == "quit":
+#             break
+#         input_split = input_str.replace(" ","").split(",")
+#         if len(input_split) != 2 or input_split[1] == "":
+#             print("Invalid input, please input again!")
+#             continue
+#         if input_split[1] not in db.tables:
+#             print("There is no such table!")
+#             continue
+#         else:
+#             foregin_table = db.tables[input_split[1]]
 
-        input_str = input("Please input foreign key and its table(use , as delimiter):")
-        if input_str == "quit":
-            break
-        input_split = input_str.replace(" ","").split(",")
-        if len(input_split) != 2 or input_split[1] == "":
-            print("Invalid input, please input again!")
-            continue
-        if input_split[1] not in db.tables:
-            print("There is no such table!")
-            continue
-        else:
-            foregin_table = db.tables[input_split[1]]
+#         result = foregin_table.get_keys().pop()
+#         if not input_split[0] in result:
+#             print("The key is not the key in the table " + input_split[1] + ".")
+#             continue
 
-        result = foregin_table.get_keys().pop()
-        if not input_split[0] in result:
-            print("The key is not the key in the table " + input_split[1] + ".")
-            continue
-
-        table.add_foreign_key(input_str[0], foregin_table)
-        print("Add foreign key successfully")
+#         table.add_foreign_key(input_str[0], foregin_table)
+#         print("Add foreign key successfully")
 
     return table
 
