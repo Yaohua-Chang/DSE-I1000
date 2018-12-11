@@ -10,7 +10,7 @@ def create_tables():
     print("Please input at least one attribute. Input 'quit' at any time to stop.")
 
     while True:
-        input_str = input("Please input the name and type (use , as delimiter) for one attribute:")
+        input_str = input("Please input the name and type (\'integer\'  or \'string\') for one attribute. Use \',\' as delimiter :")
         if input_str == "quit":
             if len(attrs) == 0:
                 print("You need to input at least 1 attribute for the new table")
@@ -41,7 +41,7 @@ def create_constraint(table, db):
 
     while True:
 
-        input_str = input("Please input FD:")
+        input_str = input("Please input FD:").replace(" ","")
         if input_str == "quit":
             if len(table.fds) == 0:
                 print("Please input at least one FD for the table.")
@@ -60,13 +60,13 @@ def create_constraint(table, db):
         if input_str == "no":
             break
         else:
-            input_str = input("Please input a Fd that you want to remove:")
+            input_str = input("Please input a Fd that you want to remove:").replace(" ","")
             feedback = table.remove_fd(input_str)
             print(feedback)
 
     while True:
 
-        input_str = input("Please input MVD:")
+        input_str = input("Please input MVD:").replace(" ","")
         if input_str == "quit":
             break
 

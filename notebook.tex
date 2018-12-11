@@ -1,0 +1,1133 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{sample\_running\_result}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{from} \PY{n+nn}{database} \PY{k}{import} \PY{n}{Database}
+        \PY{k+kn}{from} \PY{n+nn}{table} \PY{k}{import} \PY{n}{Table}
+        \PY{k+kn}{from} \PY{n+nn}{attribute} \PY{k}{import} \PY{n}{Attribute}
+        \PY{k+kn}{from} \PY{n+nn}{TableOperators} \PY{k}{import} \PY{o}{*}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{k}{def} \PY{n+nf}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{n}{A} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{integer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{B} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{integer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{C} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{string}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{D} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{string}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{E} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{integer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{F} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{F}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{string}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{G} \PY{o}{=} \PY{n}{Attribute}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{G}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{string}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+            \PY{n}{new\PYZus{}table1} \PY{o}{=} \PY{n}{Table}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Student}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{[}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{,}\PY{n}{C}\PY{p}{]}\PY{p}{)}
+            \PY{n}{new\PYZus{}table2} \PY{o}{=} \PY{n}{Table}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Grade}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{[}\PY{n}{E}\PY{p}{,} \PY{n}{G}\PY{p}{]}\PY{p}{)}
+            \PY{n}{new\PYZus{}table3} \PY{o}{=} \PY{n}{Table}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{test3}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{[}\PY{n}{A}\PY{p}{,}\PY{n}{B}\PY{p}{,}\PY{n}{C}\PY{p}{]}\PY{p}{)}
+        
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{add\PYZus{}fd}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A\PYZhy{}\PYZgt{}B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{add\PYZus{}fd}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A\PYZhy{}\PYZgt{}C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{master\PYZus{}key} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{18}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Tony}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{22}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Tom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{21}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Alex}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{new\PYZus{}table1}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{24}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Matt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+        
+            \PY{n}{new\PYZus{}table2}\PY{o}{.}\PY{n}{add\PYZus{}fd}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E\PYZhy{}\PYZgt{}G}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{new\PYZus{}table2}\PY{o}{.}\PY{n}{master\PYZus{}key} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{E}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n}{new\PYZus{}table2}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{new\PYZus{}table2}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+        
+            \PY{n}{new\PYZus{}table3}\PY{o}{.}\PY{n}{add\PYZus{}fd}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AB\PYZhy{}\PYZgt{}C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{new\PYZus{}table3}\PY{o}{.}\PY{n}{master\PYZus{}key} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{AB}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n}{new\PYZus{}table3}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+            \PY{n}{new\PYZus{}table3}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+        
+            
+            \PY{n}{db} \PY{o}{=} \PY{n}{Database}\PY{p}{(}\PY{p}{)}
+            \PY{n}{db}\PY{o}{.}\PY{n}{add\PYZus{}table}\PY{p}{(}\PY{n}{new\PYZus{}table1}\PY{p}{)}
+            \PY{n}{db}\PY{o}{.}\PY{n}{add\PYZus{}table}\PY{p}{(}\PY{n}{new\PYZus{}table2}\PY{p}{)}
+            \PY{n}{db}\PY{o}{.}\PY{n}{add\PYZus{}table}\PY{p}{(}\PY{n}{new\PYZus{}table3}\PY{p}{)}
+        
+            \PY{k}{return} \PY{n}{db}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print}\PY{p}{(}\PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{k}{def} \PY{n+nf}{create\PYZus{}tables}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{n}{table\PYZus{}name} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input new table name:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{n}{attrs} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input at least one attribute. Input }\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ at any time to stop.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+             \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+                 \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input the name and type (}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{integer}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{  or }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{string}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{) for one attribute. Use }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{,}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ as delimiter :}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                     \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{attrs}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{You need to input at least 1 attribute for the new table}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                     \PY{k}{else}\PY{p}{:}
+                         \PY{k}{break}
+                 \PY{k}{else}\PY{p}{:}
+                     \PY{n}{input\PYZus{}split} \PY{o}{=} \PY{n}{input\PYZus{}str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                     \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{input\PYZus{}split}\PY{p}{)} \PY{o}{!=} \PY{l+m+mi}{2} \PY{o+ow}{or} \PY{n}{input\PYZus{}split}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The input is not correct, please input again.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                     \PY{k}{else}\PY{p}{:}
+                         \PY{n}{attrs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{Attribute}\PY{p}{(}\PY{n}{input\PYZus{}split}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{input\PYZus{}split}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Successfully add a new attribute}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+             \PY{n}{new\PYZus{}table} \PY{o}{=} \PY{n}{Table}\PY{p}{(}\PY{n}{table\PYZus{}name}\PY{p}{,} \PY{n}{attrs}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The tabel }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table\PYZus{}name} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ have created successfully!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{n}{new\PYZus{}table}\PY{p}{)}
+         
+             \PY{k}{return} \PY{n}{new\PYZus{}table}
+         
+         
+         \PY{k}{def} \PY{n+nf}{create\PYZus{}constraint}\PY{p}{(}\PY{n}{table}\PY{p}{,} \PY{n}{db}\PY{p}{)}\PY{p}{:}
+             \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+                 \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input Boolean condition :}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                     \PY{k}{break}
+                 \PY{n}{feedback} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{add\PYZus{}boolean\PYZus{}conditions}\PY{p}{(}\PY{n}{input\PYZus{}str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{n}{feedback}\PY{p}{)}
+         
+             \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+         
+                 \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input FD:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                     \PY{k}{break}
+                 \PY{n}{feedback} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{add\PYZus{}fd}\PY{p}{(}\PY{n}{input\PYZus{}str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{n}{feedback}\PY{p}{)}
+         
+             \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+                 \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{fds}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                     \PY{k}{break}
+                 \PY{k}{else}\PY{p}{:}
+                     \PY{n}{table}\PY{o}{.}\PY{n}{print\PYZus{}fds}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Do you want to remove some Fds(yes or no):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{no}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                     \PY{k}{break}
+                 \PY{k}{else}\PY{p}{:}
+                     \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input a Fd that you want to remove:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                     \PY{n}{feedback} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{remove\PYZus{}fd}\PY{p}{(}\PY{n}{input\PYZus{}str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+                     \PY{n+nb}{print}\PY{p}{(}\PY{n}{feedback}\PY{p}{)}
+         
+             \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+         
+                 \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input MVD:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                     \PY{k}{break}
+         
+                 \PY{n}{feedback} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{add\PYZus{}mvd}\PY{p}{(}\PY{n}{input\PYZus{}str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{n}{feedback}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}     while True:}
+         
+         \PY{c+c1}{\PYZsh{}         input\PYZus{}str = input(\PYZdq{}Please input foreign key and its table(use , as delimiter):\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}         if input\PYZus{}str == \PYZdq{}quit\PYZdq{}:}
+         \PY{c+c1}{\PYZsh{}             break}
+         \PY{c+c1}{\PYZsh{}         input\PYZus{}split = input\PYZus{}str.replace(\PYZdq{} \PYZdq{},\PYZdq{}\PYZdq{}).split(\PYZdq{},\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}         if len(input\PYZus{}split) != 2 or input\PYZus{}split[1] == \PYZdq{}\PYZdq{}:}
+         \PY{c+c1}{\PYZsh{}             print(\PYZdq{}Invalid input, please input again!\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}             continue}
+         \PY{c+c1}{\PYZsh{}         if input\PYZus{}split[1] not in db.tables:}
+         \PY{c+c1}{\PYZsh{}             print(\PYZdq{}There is no such table!\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}             continue}
+         \PY{c+c1}{\PYZsh{}         else:}
+         \PY{c+c1}{\PYZsh{}             foregin\PYZus{}table = db.tables[input\PYZus{}split[1]]}
+         
+         \PY{c+c1}{\PYZsh{}         result = foregin\PYZus{}table.get\PYZus{}keys().pop()}
+         \PY{c+c1}{\PYZsh{}         if not input\PYZus{}split[0] in result:}
+         \PY{c+c1}{\PYZsh{}             print(\PYZdq{}The key is not the key in the table \PYZdq{} + input\PYZus{}split[1] + \PYZdq{}.\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}             continue}
+         
+         \PY{c+c1}{\PYZsh{}         table.add\PYZus{}foreign\PYZus{}key(input\PYZus{}str[0], foregin\PYZus{}table)}
+         \PY{c+c1}{\PYZsh{}         print(\PYZdq{}Add foreign key successfully\PYZdq{})}
+         
+             \PY{k}{return} \PY{n}{table}
+         
+         
+         \PY{k}{def} \PY{n+nf}{update\PYZus{}normal\PYZus{}form}\PY{p}{(}\PY{n}{db}\PY{p}{,} \PY{n}{table}\PY{p}{)}\PY{p}{:}
+             \PY{k}{if} \PY{n}{table}\PY{o}{.}\PY{n}{nf} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                 \PY{n}{table}\PY{o}{.}\PY{n}{get\PYZus{}normal\PYZus{}form}\PY{p}{(}\PY{p}{)}
+         
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Currently this table [}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{name} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{] has normal form: }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{nf}\PY{p}{)}
+         
+             \PY{k}{if} \PY{o+ow}{not} \PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{nf} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{3NF}\PY{l+s+s2}{\PYZdq{}} \PY{o+ow}{or} \PY{n}{table}\PY{o}{.}\PY{n}{nf} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{BCNF}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{You can either delete this table or update its FD}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{decision} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Either type }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{del}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ for deletion of the table or }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{u}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ to update:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+                 \PY{k}{if} \PY{n}{decision} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{del}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                     \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Are you sure delete the table }\PY{l+s+s2}{\PYZdq{}}\PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{name} \PY{o}{+}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{?(yea or no)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                     \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{yes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                         \PY{n}{db}\PY{o}{.}\PY{n}{delete\PYZus{}table}\PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{name}\PY{p}{)}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{delete the tabel [}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{name} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{] successfuly}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                         \PY{n}{table} \PY{o}{=} \PY{k+kc}{None}
+                     \PY{k}{else}\PY{p}{:}
+                         \PY{n}{update\PYZus{}normal\PYZus{}form}\PY{p}{(}\PY{n}{db}\PY{p}{,} \PY{n}{table}\PY{p}{)}
+                 \PY{k}{elif} \PY{n}{decision} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{u}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                     \PY{n}{done} \PY{o}{=} \PY{k+kc}{False}
+                     \PY{k}{while} \PY{o+ow}{not} \PY{n}{done}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Current FD(s) in the table: }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{fds}\PY{p}{)} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                         \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Type }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{a}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ to add a new FD or }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{d}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ to delete a FD: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                         \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                             \PY{n}{new\PYZus{}fd} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Add a new FD: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                             \PY{n}{feedback} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{add\PYZus{}fd}\PY{p}{(}\PY{n}{new\PYZus{}fd}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+                             \PY{n+nb}{print}\PY{p}{(}\PY{n}{feedback}\PY{p}{)}
+                             \PY{n}{table}\PY{o}{.}\PY{n}{get\PYZus{}normal\PYZus{}form}\PY{p}{(}\PY{p}{)}
+                             \PY{n}{again} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The table now has normal form }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{nf} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ would you like to continue (y/n)?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                             \PY{k}{if} \PY{n}{again} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                                 \PY{n}{done} \PY{o}{=} \PY{k+kc}{True}
+         
+                         \PY{k}{elif} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                             \PY{n}{del\PYZus{}fd} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Enter FD to be deleted: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                             \PY{n}{feedback} \PY{o}{=} \PY{n}{table}\PY{o}{.}\PY{n}{remove\PYZus{}fd}\PY{p}{(}\PY{n}{del\PYZus{}fd}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+                             \PY{n+nb}{print}\PY{p}{(}\PY{n}{feedback}\PY{p}{)}
+                             \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{fds}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The table has no FD left! Please start again}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                                 \PY{k}{break}
+         
+                             \PY{k}{else}\PY{p}{:}
+                                 \PY{n}{table}\PY{o}{.}\PY{n}{get\PYZus{}normal\PYZus{}form}\PY{p}{(}\PY{p}{)}
+                                 \PY{n}{again} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The table now has normal form }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{nf} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ would you like to continue (y/n)?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                                 \PY{k}{if} \PY{n}{again} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                                     \PY{n}{done} \PY{o}{=} \PY{k+kc}{True}
+                         \PY{k}{else}\PY{p}{:}
+                             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{That}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s not a valid decision!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+                 \PY{k}{else}\PY{p}{:}
+                     \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{That}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s not a valid decision!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+             \PY{k}{return} \PY{n}{table}
+         
+         \PY{k}{def} \PY{n+nf}{user\PYZus{}define\PYZus{}key}\PY{p}{(}\PY{n}{table}\PY{p}{)}\PY{p}{:}
+             \PY{n}{table}\PY{o}{.}\PY{n}{get\PYZus{}keys}\PY{p}{(}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please define keys for the table [}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{name} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{].}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{n}{table}\PY{o}{.}\PY{n}{user\PYZus{}define\PYZus{}key}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{db} \PY{o}{=} \PY{n}{Database}\PY{p}{(}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} Task I.a}
+        \PY{c+c1}{\PYZsh{} Define new tables}
+        \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+            \PY{n}{new\PYZus{}table} \PY{o}{=} \PY{n}{create\PYZus{}tables}\PY{p}{(}\PY{p}{)}
+            \PY{n}{db}\PY{o}{.}\PY{n}{add\PYZus{}table}\PY{p}{(}\PY{n}{new\PYZus{}table}\PY{p}{)}
+            \PY{n}{is\PYZus{}add\PYZus{}new\PYZus{}table} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Do you still want to define a new table(yes or no)?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{if} \PY{n}{is\PYZus{}add\PYZus{}new\PYZus{}table} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{no}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Current tables in the Database:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                \PY{n+nb}{print}\PY{p}{(}\PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{)}
+                \PY{k}{break}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{} Task I.b}
+         \PY{c+c1}{\PYZsh{} Ask users to input possible constraints for each defined table}
+         \PY{k}{for} \PY{n}{table\PYZus{}name}\PY{p}{,} \PY{n}{table} \PY{o+ow}{in} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please input constraint for the table [}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{table}\PY{o}{.}\PY{n}{name} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{]. Input }\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{ at any time to stop.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{n}{table} \PY{o}{=} \PY{n}{create\PYZus{}constraint}\PY{p}{(}\PY{n}{table}\PY{p}{,} \PY{n}{db}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Please input constraint for the table [Student]. Input 'quit' at any time to stop.
+Please input Boolean condition :B>18
+Add boolean conditions successfully
+Please input Boolean condition :quit
+Please input FD:A->BC
+Added a new fd successfully: A->BC
+Please input FD:quit
+The table named:  Student 
+Has FD's:  ['A->B', 'A->C']
+Do you want to remove some Fds(yes or no):no
+Please input MVD:quit
+Please input constraint for the table [Grade]. Input 'quit' at any time to stop.
+Please input Boolean condition :quit
+Please input FD:quit
+Please input MVD:quit
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{} Task I.c}
+        \PY{c+c1}{\PYZsh{} Evaluate the NF category for the user defined DB}
+        \PY{n}{db} \PY{o}{=} \PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}
+        \PY{k}{for} \PY{n}{table\PYZus{}name}\PY{p}{,} \PY{n}{table} \PY{o+ow}{in} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{n}{table}\PY{o}{.}\PY{n}{get\PYZus{}normal\PYZus{}form}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table has normal form: BCNF
+This table has normal form: BCNF
+This table has normal form: BCNF
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{c+c1}{\PYZsh{} Task I.d}
+        \PY{c+c1}{\PYZsh{} Ask users to define keys for each table}
+        \PY{k}{for} \PY{n}{table\PYZus{}name}\PY{p}{,} \PY{n}{table} \PY{o+ow}{in} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{n}{table}\PY{o}{.}\PY{n}{print\PYZus{}keys}\PY{p}{(}\PY{p}{)}
+            \PY{n}{table}\PY{o}{.}\PY{n}{user\PYZus{}define\PYZus{}key}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Attributes in the table: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{repr}\PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{attributes\PYZus{}names}\PY{p}{)}\PY{p}{)}
+            \PY{c+c1}{\PYZsh{}print(table.attributes)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+All keys for this table are :  \{'A'\}
+What key would you like to use? (type 'rand' to have it selected for you): rand
+You have been given the key: A
+Attributes in the table: \{'A', 'B', 'C'\}
+All keys for this table are :  \{'E'\}
+What key would you like to use? (type 'rand' to have it selected for you): rand
+You have been given the key: E
+Attributes in the table: \{'E', 'G'\}
+All keys for this table are :  \{'AB'\}
+What key would you like to use? (type 'rand' to have it selected for you): rand
+You have been given the key: AB
+Attributes in the table: \{'A', 'B', 'C'\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{c+c1}{\PYZsh{} Task II.a}
+        \PY{c+c1}{\PYZsh{} Input new tuples to all tables}
+        \PY{n}{db} \PY{o}{=} \PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}
+        \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The tables in current db: }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{n}{db}\PY{p}{)}
+            \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please choose a table in order to input a new tuple into it(or quit to terminate): }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{quit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                \PY{k}{break}
+            \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o+ow}{in} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{:}
+                \PY{n}{table\PYZus{}to\PYZus{}add} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{[}\PY{n}{input\PYZus{}str}\PY{p}{]}
+                \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+                    \PY{n}{in\PYZus{}tuple\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Input a new tuple into }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{input\PYZus{}str} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ using }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{,}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{ as delimiter(or quit):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                    \PY{k}{if} \PY{n}{in\PYZus{}tuple\PYZus{}str} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{quit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                        \PY{k}{break}
+                    \PY{n}{in\PYZus{}tuple\PYZus{}as\PYZus{}list} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{in\PYZus{}tuple\PYZus{}str}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+                    \PY{n}{type\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{n}{a}\PY{o}{.}\PY{n}{type} \PY{k}{for} \PY{n}{a} \PY{o+ow}{in} \PY{n}{table\PYZus{}to\PYZus{}add}\PY{o}{.}\PY{n}{attributes}\PY{p}{]}
+                    \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{el} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{in\PYZus{}tuple\PYZus{}as\PYZus{}list}\PY{p}{)}\PY{p}{:}
+                        \PY{k}{if} \PY{n}{type\PYZus{}list}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{integer}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                            \PY{n}{in\PYZus{}tuple\PYZus{}as\PYZus{}list}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{n}{el}\PY{p}{)}
+                    \PY{c+c1}{\PYZsh{} handle case of integer}
+                    \PY{n}{table\PYZus{}to\PYZus{}add}\PY{o}{.}\PY{n}{add\PYZus{}tuple}\PY{p}{(}\PY{n+nb}{tuple}\PY{p}{(}\PY{n}{in\PYZus{}tuple\PYZus{}as\PYZus{}list}\PY{p}{)}\PY{p}{)}
+        
+            \PY{k}{else}\PY{p}{:}
+                \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Invaild input, please input again!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+The tables in current db: 
+
+Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Please choose a table in order to input a new tuple into it(or quit to terminate): Grade
+Input a new tuple into Grade using ',' as delimiter(or quit):15,B
+Input a new tuple into Grade using ',' as delimiter(or quit):quit
+The tables in current db: 
+
+Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+ | 15 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Please choose a table in order to input a new tuple into it(or quit to terminate): quit
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} Task II.b}
+         \PY{c+c1}{\PYZsh{} Delete a tuple based on key value}
+         \PY{n}{db} \PY{o}{=} \PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}
+         \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The tables in current db: }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{db}\PY{p}{)}
+             \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Would you like to delete a tuple from any table? (y/n)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{k}{break}
+             \PY{k}{else}\PY{p}{:}
+                 \PY{n}{table\PYZus{}name} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Which table would you like to delete from?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{table} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{[}\PY{n}{table\PYZus{}name}\PY{p}{]}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{This the table you will be deleting from: }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{table}\PY{p}{)}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Which has the key: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{table}\PY{o}{.}\PY{n}{keys}\PY{p}{)}
+                 \PY{n}{key} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Please provide the key for the tuple you}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{d like to delete: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{table}\PY{o}{.}\PY{n}{remove\PYZus{}tuple}\PY{p}{(}\PY{n}{key}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to delete a tuple from any table? (y/n)y
+Which table would you like to delete from?Student
+This the table you will be deleting from: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+
+Which has the key:  set()
+Please provide the key for the tuple you'd like to delete: 4
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to delete a tuple from any table? (y/n)n
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{} Task II.c}
+         \PY{c+c1}{\PYZsh{} Find tuples based on conditions}
+         \PY{n}{db} \PY{o}{=} \PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}
+         \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The tables in current db: }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{db}\PY{p}{)}
+             \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Would you like to find any tuples from some conditions in the tables (y/n)?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{k}{break}
+             \PY{k}{else}\PY{p}{:}
+         \PY{c+c1}{\PYZsh{}         table\PYZus{}name = input(\PYZdq{}Which table would you like to search in?\PYZdq{})}
+                 \PY{n}{table} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{[}\PY{n}{table\PYZus{}name}\PY{p}{]}
+         \PY{c+c1}{\PYZsh{}         attr\PYZus{}name = input(\PYZdq{}Which attribute would you like to condition by?\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}         values = input(\PYZdq{}Which values would you like to condition on?\PYZdq{})}
+         \PY{c+c1}{\PYZsh{}         conditions = input(\PYZdq{}Which condition do you want (\PYZgt{}, \PYZgt{}, \PYZlt{}\PYZgt{}, or ==)\PYZdq{})}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{n}{table}\PY{o}{.}\PY{n}{get\PYZus{}tuple\PYZus{}conditions}\PY{p}{(}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{==}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Group by attribute(s) in specific table}
+         \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The tables in current db: }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{db}\PY{p}{)}
+             \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Would you like to group by any attributes from the tables (y/n)?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{k}{break}
+             \PY{k}{else}\PY{p}{:}
+                 \PY{n}{table\PYZus{}name} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Which table would you like to group by in?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{table} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{[}\PY{n}{table\PYZus{}name}\PY{p}{]}
+                 \PY{n}{attr\PYZus{}name} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Which attribute would you like to group by?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{table}\PY{o}{.}\PY{n}{group\PYZus{}by}\PY{p}{(}\PY{n}{attr\PYZus{}name}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to find any tuples from some conditions in the tables (y/n)?y
+\{'== 2': \{'2'\}, '> 20': \{'4', '2', '3'\}\}
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to find any tuples from some conditions in the tables (y/n)?Student
+\{'== 2': \{'2'\}, '> 20': \{'4', '2', '3'\}\}
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to find any tuples from some conditions in the tables (y/n)?n
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to group by any attributes from the tables (y/n)?y
+Which table would you like to group by in?test3
+Which attribute would you like to group by?A
+Grouping by: 1
+(1, 12, 'B')
+(1, 10, 'A')
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to group by any attributes from the tables (y/n)?n
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} TODO Task II.d}
+         \PY{c+c1}{\PYZsh{} Choose to perform the operators for two tables}
+         \PY{n}{db} \PY{o}{=} \PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}
+         \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The tables in current db: }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{db}\PY{p}{)}
+             \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Would you like to perform operators on tables (y/n)?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                 \PY{k}{break}
+             \PY{k}{else}\PY{p}{:}
+                 \PY{n}{table\PYZus{}one} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Select the first table: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{table1} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{[}\PY{n}{table\PYZus{}one}\PY{p}{]}
+                 \PY{n}{table\PYZus{}two} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Select the second table: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+                 \PY{n}{table2} \PY{o}{=} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{[}\PY{n}{table\PYZus{}two}\PY{p}{]}
+                 \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+                     \PY{n}{input\PYZus{}str} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Select operators:}\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{            }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{cjoin}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{ for cross join}\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{                              }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{njoin}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{ for natural join}\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{                              }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{union}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{ for union}\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{                              }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{inter}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{ for intersection}\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{                              }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{diff}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s1}{ for difference}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                     \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{njoin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{n}{njoin\PYZus{}table}\PY{p}{(}\PY{n}{table1}\PY{p}{,}\PY{n}{table2}\PY{p}{)}\PY{p}{)}
+                     \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cjoin}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{n}{cjoin\PYZus{}table}\PY{p}{(}\PY{n}{table1}\PY{p}{,}\PY{n}{table2}\PY{p}{)}\PY{p}{)}
+                     \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{union}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{n}{union}\PY{p}{(}\PY{n}{table1}\PY{p}{,}\PY{n}{table2}\PY{p}{)}\PY{p}{)}
+                     \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{n}{intersection}\PY{p}{(}\PY{n}{table1}\PY{p}{,}\PY{n}{table2}\PY{p}{)}\PY{p}{)}
+                     \PY{k}{if} \PY{n}{input\PYZus{}str} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{diff}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+                         \PY{n+nb}{print}\PY{p}{(}\PY{n}{difference}\PY{p}{(}\PY{n}{table1}\PY{p}{,}\PY{n}{table2}\PY{p}{)}\PY{p}{)}
+                     \PY{k}{else}\PY{p}{:}
+                         \PY{k}{break}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to perform operators on tables (y/n)?y
+Select the first table: Student
+Select the second table: Grade
+Select operators:            
+ 'cjoin' for cross join                              
+ 'njoin' for natural join                              
+ 'union' for union                              
+ 'inter' for intersection                              
+ 'diff' for difference
+cjoin
+   A   B     C   E  G
+0  1  18  Tony  10  A
+1  1  18  Tony  12  B
+2  2  22   Tom  10  A
+3  2  22   Tom  12  B
+4  3  21  Alex  10  A
+5  3  21  Alex  12  B
+6  4  24  Matt  10  A
+7  4  24  Matt  12  B
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to perform operators on tables (y/n)?y
+Select the first table: Student
+Select the second table: test3
+Select operators:            
+ 'cjoin' for cross join                              
+ 'njoin' for natural join                              
+ 'union' for union                              
+ 'inter' for intersection                              
+ 'diff' for difference
+diff
+   A   B     C
+0  1  18  Tony
+1  2  22   Tom
+2  3  21  Alex
+3  4  24  Matt
+Select operators:            
+ 'cjoin' for cross join                              
+ 'njoin' for natural join                              
+ 'union' for union                              
+ 'inter' for intersection                              
+ 'diff' for difference
+quit
+The tables in current db: 
+ Table: Student
+ | A | B | C |
+---------------
+ | 1 | 18 | Tony | 
+ | 2 | 22 | Tom | 
+ | 3 | 21 | Alex | 
+ | 4 | 24 | Matt | 
+Table: Grade
+ | E | G |
+----------
+ | 10 | A | 
+ | 12 | B | 
+Table: test3
+ | A | B | C |
+---------------
+ | 1 | 10 | A | 
+ | 1 | 12 | B | 
+
+Would you like to perform operators on tables (y/n)?n
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{} TODO Task II.e}
+         \PY{c+c1}{\PYZsh{} Delete a table and ensure the across\PYZhy{}table integrity}
+         \PY{n}{db} \PY{o}{=} \PY{n}{test\PYZus{}data}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{[}\PY{n}{name} \PY{k}{for} \PY{n}{name}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+         \PY{n}{table\PYZus{}to\PYZus{}del} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{What is the name of the table you}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{d like to delete?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{db}\PY{o}{.}\PY{n}{delete\PYZus{}table}\PY{p}{(}\PY{n}{table\PYZus{}to\PYZus{}del}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This breaks the consistency implied by the FD: A->B
+This breaks the consistency implied by the FD: A->B
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+This table is not part of a database! No foreign key to check
+['Student', 'Grade', 'test3']
+What is the name of the table you'd like to delete?Grade
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}23}]:} True
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} Write database to text file}
+         \PY{n}{write\PYZus{}ans} \PY{o}{=} \PY{n+nb}{input}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Would you like to write whole database (}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{all}\PY{l+s+se}{\PYZbs{}\PYZsq{}}\PY{l+s+s2}{) or a specific table to a txt file?}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{k}{if} \PY{n}{write\PYZus{}ans} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{all}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+             \PY{n}{db}\PY{o}{.}\PY{n}{write\PYZus{}database}\PY{p}{(}\PY{p}{)}
+         \PY{k}{elif} \PY{n}{write\PYZus{}ans} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nothing}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{k}{else}\PY{p}{:}
+             \PY{k}{if} \PY{n}{write\PYZus{}ans} \PY{o+ow}{in} \PY{n}{db}\PY{o}{.}\PY{n}{tables}\PY{p}{:}
+                 \PY{n}{db}\PY{o}{.}\PY{n}{write\PYZus{}table}\PY{p}{(}\PY{n}{write\PYZus{}ans}\PY{p}{)}
+             \PY{k}{else}\PY{p}{:}
+                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{There is not table with name: }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{write\PYZus{}ans}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Would you like to write whole database ('all') or a specific table to a txt file?all
+
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
