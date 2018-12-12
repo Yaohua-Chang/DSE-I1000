@@ -10,14 +10,14 @@ when the user adds tuples to them. Below is an overview of the classes used to m
 this functionality possible.
 
 ### Attribute
-_Defined in attribute.py_
+##### Defined in attribute.py
 This class defines the attribute objects which are added to a Table object to represent
 the columns. An attribute has an internal ordering (alphabetically) in order to sort
 a table. Furthermore, value constraints can be set (e.g. values >= 5 only), which
 will then be checked upon adding tuples to the table.
 
 ### Table
-_Defined in table.py_
+##### Defined in table.py
 This class defines the table objects that are containers of attributes (defined above)
 and the tuples that represent the atomic values of those attributes. Upon creating a
 table object the user can define functional dependencies using `add_fd()` where an
@@ -41,7 +41,7 @@ are provided by `group_by()` which returns the groups within a certain attribute
 by `get_tuple_conditions()` where the user can filter out certain values.
 
 ### Database
-_Defined in database.py_
+##### Defined in database.py
 A database is the container for multiple table objects, and thus defines their relationship
 with one another. This allows for the ability to perform foreign key checks. The
 user adds tables by `add_table()` and can remove them by `remove_table()`. A cross-table
@@ -49,4 +49,4 @@ dependency check is performed here. Additionally, a database can be written to a
 document by `write_database()` or a specific table by `write_table()`.
 
 ### Testing/Examples
-<< COMPLETE >>
+A presentation overviewing the functionality of the database and its constituent parts can be found in Presentation.pptx. A Jupyter notebook containing the samples discussed there is provided in Project 2 Master as both an .ipynb and a static .html document.
