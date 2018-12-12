@@ -23,6 +23,7 @@ class Table:
         self.tuples = {}
         self.parent_database = None  # need reference to Database object for foreign keys
         self.is_empty = True
+        self.TUPLE_PADDING = 5
 
     def __repr__(self):
         out = "Table: " + self.name + "\n\r"
@@ -438,7 +439,7 @@ class Table:
         # check FD consistency
         for fd in self.fds:
             lhs_str, rhs_str = fd.split("->")
-            lengths = [len(str(el)) for el in t]
+            lengths = [len(str(el)) + self.TUPLE_PADDING for el in t]
             idx_lhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in lhs_str]
             idx_rhs = [i for i, c in enumerate(sorted(self.attributes_names)) if c in rhs_str]
             dict_check = {}
@@ -446,6 +447,7 @@ class Table:
             tmp_tuples.update({k:t})
             for key in tmp_tuples:
                 str_tup = ''.join(map(str, tmp_tuples[key]))
+                str_tup += " " * self.TUPLE_PADDING
                 lhs_value, rhs_value = "", ""
                 for idx in idx_lhs:
                     lhs_value += str_tup[idx:idx+lengths[idx]]
